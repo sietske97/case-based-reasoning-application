@@ -17,14 +17,18 @@ This file contains the code of the application. First, the three scripts are sou
 
 ## data
 The data folder contains two files:
+
 **data.csv**is the dataset used to run the cbr model. It is the database in which similar cases are searched.
+
 **query.csv**is an example file that a user can edit and upload via the application.
 
 ## R
 The R folder consists of three files.
-**01_libraries.R**is a script that loads libraries
-**02_functions.R**is a script with two user-defined functions that the model uses
-**03_defining_values.R**is a script that defines some values that the app needs. This way there is no unnecessary code in the app itself.
+**01_libraries.R** is a script that loads libraries
+
+**02_functions.R** is a script with two user-defined functions that the model uses
+
+**03_defining_values.R** is a script that defines some values that the app needs. This way there is no unnecessary code in the app itself.
 
 ## rsconnect
 Data used for uploading the application to the shinyapps.io server
