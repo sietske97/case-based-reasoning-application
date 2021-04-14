@@ -1,5 +1,5 @@
 # Case Based Reasoning Application
-This is a shiny app, containing a CBR prototype based on open data from the Couk County Government. 
+This repository contains a case-based reasoning model Shiny App, with a UI-interface. The model predicts the sentence-type (detention or non-detention) of a new lawsuit case. The model uses open data from the Cook County Government (https://datacatalog.cookcountyil.gov/Courts/Sentencing). 
 
 # How to run the app
 ## Run the app in your browser
