@@ -9,6 +9,7 @@ A version of this app is also hosted via shinyapps.io and can be viewed at the f
 Run the app from Rstudio, without cloning this repository, by running the following code:
 ```[run app local, echo = TRUE]
 runGitHub("case-based-reasoning-application", "sietske97")
+```
 
 # Contents of the folders
 ## app.R
