@@ -1,23 +1,35 @@
-# Case Based Reasoning Applicatie
-Dit is een shiny app, met daarin een CBR-prototype gebaseerd op open data van de Couk County Government. De applicatie kan gerund worden door deze repository te clonen en dan in app.R op 'run' te klikken. Daarnaast is een versie van deze app ook gehost via shinyapps.io en te bekijken op de volgende URL:  https://sietske97.shinyapps.io/case_based_reasoning_application/ 
+# Case Based Reasoning Application
+This is a shiny app, containing a CBR prototype based on open data from the Couk County Government. 
 
-# Inhoud van de mappen
+# How to run the app
+## Run the app in your browser
+A version of this app is also hosted via shinyapps.io and can be viewed at the following URL: https://sietske97.shinyapps.io/case_based_reasoning_application/
+
+# How to run the app locally
+Run the app from Rstudio, without cloning this repository, by running the following code:
+```[run app local, echo = TRUE]
+runGitHub("case-based-reasoning-application", "sietske97")
+```
+
+
+
+# Contents of the folders
 ## app.R
-Dit bestand bevat de code van de applicatie. Eerst worden de drie scripts in de map R gesourced. Daarna wordt onder het deel ui de user interface gedefinieerd. Het deel 'server' bevat de responsive code om de user interface te genereren. 
+This file contains the code of the application. First, the three scripts are sourced in the R folder. The user interface is then defined under the ui section. The 'server' part contains the responsive code to generate the user interface.
 
 ## data
-De data map bevat twee bestanden:
-**data.csv** is de dataset die gebruikt wordt om het cbr-model te runnen. Het is de database waarin gezocht wordt naar soortgelijke casussen.
-**query.csv** is een voorbeeld bestand dat een gebruiker zelf kan aanpassen en kan uploaden via de applicatie. 
+The data folder contains two files:
+** data.csv ** is the dataset used to run the cbr model. It is the database in which similar cases are searched.
+** query.csv ** is an example file that a user can edit and upload via the application.
 
 ## R
-De map R bestaat uit drie bestanden. 
-**01_libraries.R** is een script die libraries laadt
-**02_functions.R** is een script met twee user-defined functies die het model gebruikt
-**03_defining_values.R** is een script die enkele values definieert die de app nodig heeft. Op deze manier staat er geen overbodige code in de app zelf. 
+The R folder consists of three files.
+** 01_libraries.R ** is a script that loads libraries
+** 02_functions.R ** is a script with two user-defined functions that the model uses
+** 03_defining_values.R ** is a script that defines some values ​​that the app needs. This way there is no unnecessary code in the app itself.
 
 ## rsconnect
-Data die gebruikt is voor het uploaden van de applicatie naar de shinyapps.io server
+Data used for uploading the application to the shinyapps.io server
 
 ## www
-De www map bevat extra gegevens die de app nodig heeft, zoals afbeeldingen, html-bestanden en een css-opmaak bestand. De .jpg en .png bestanden zijn afbeeldingen die in de app geladen worden. Het workflow.html bestand laat de workflow van de targets zien, en het mycss.css bevat extra opmaak voor de plaatsing van het lablogo. 
+The www folder contains additional data that the app needs, such as images, html files and a CSS format file. The .jpg and .png files are images that are loaded into the app. The workflow.html file shows the workflow of the targets, and the mycss.css contains additional formatting for the placement of the lab logo.
