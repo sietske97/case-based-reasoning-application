@@ -151,7 +151,7 @@ cbr_model <- function(database,
     arrange(soort) %>% #sorteer bij 'soort' zodat query als eerste te zien is
     relocate(soort, similarity, sentence, gender) 
   # 
-  class_query <- ifelse(levels(knn_results) == 0, "Detention", "Non-detention")
+  class_query <- ifelse(levels(knn_results) == 0, "Non-detention", "Detention")
   
   results <- list("results_dataframe" = results_dataframe,
                   "class" = class_query,
