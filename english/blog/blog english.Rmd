@@ -1,6 +1,8 @@
 ---
 title: "How to make a Case-based Reasoning system in R"
-output: html_document
+output:
+  html_document: default
+  word_document: default
 ---
 
 ```{r setup, include=FALSE}

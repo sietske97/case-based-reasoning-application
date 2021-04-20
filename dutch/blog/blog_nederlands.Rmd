@@ -1,6 +1,8 @@
 ---
 title: "Hoe maak je een Case-based Reasoning systeem in R"
-output: html_document
+output:
+  html_document: default
+  word_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -33,25 +35,24 @@ In deze blog leg ik kort uit hoe je in R een case-based reasoning (cbr) systeem 
 Case-based reasoning is een machine learning methode die een nieuw probleem oplost, op basis van oplossingen van gelijksoortige problemen uit het verleden. Data is in een CBR-systeem altijd gerepresenteerd in een probleem-oplossing vorm: er is een probleem waarvoor een oplossing gevonden moet worden. De oplossing voor het nieuwe probleem kan gevonden worden door in de CBR-database te zoeken naar oude, soortgelijke problemen. De oplossing van dit gelijksoortig oude probleem kan vervolgens toegepast worden op het nieuwe probleem. Dit kan het nieuwe probleem oplossen. 
 
 # De CBR-cyclus
-Een CBR-systeem bestaat uit vier verschillende fases: the retrieve, reuse, revise and retain fases. Deze vier fasen vormen de CBR-cyclus. Door deze stappen te doorlopen kan een nieuwe oplossing aangedragen worden voor een nieuw probleem. De vier verschillende fases worden hieronder kort omschreven. De CBR-cyclus is te zien op de volgende afbeelding: : 
+Een CBR-systeem bestaat uit vier verschillende fases: de retrieve, reuse, revise and retain fases. Deze vier fasen vormen de CBR-cyclus. Door deze stappen te doorlopen kan een nieuwe oplossing aangedragen worden voor een nieuw probleem. De vier verschillende fases worden hieronder kort omschreven. De CBR-cyclus is te zien op de volgende afbeelding:
 
 ![**Afbeelding 1: De CBR-cyclus**](cbr_cyclus.png)
 
 
 #### 1. Retrieve fase
-De CBR-cyclus start met een nieuw probleem, the 'current problem'. Vervolgens zoekt het systeem in de case base, waarin alle oude casussen staan, naar soortgelijke casussen. Dit gebeurt met een algoritme dat de 'distance' en 'similarity' tussen de nieuwe en oude casus berekent. Verschillende algoritmes kunnen hiervoor gebruikt worden, maar in het ontwikkelde prototype wordt een KNN-algortime gebruikt. Vervolgens worden de meest gelijke casussen weergegeven aan de gebruiker. 
+De CBR-cyclus start met een nieuw probleem, the 'current problem'. Vervolgens zoekt het systeem in de case base, waarin alle oude casussen staan, naar soortgelijke casussen. Dit gebeurt met een algoritme dat de 'distance' en 'similarity' tussen de nieuwe en oude casus berekent. Verschillende algoritmes kunnen hiervoor gebruikt worden, maar in het ontwikkelde prototype wordt een KNN-algoritme gebruikt. Vervolgens worden de meest gelijke casussen weergegeven aan de gebruiker. 
 
 #### 2. Reuse fase
 Op basis van de 'retrieved case' wordt een oplossing voor de nieuwe casus aangedragen. Dit kan op verschillende manieren gedaan worden. De meest simpele methode is door de oplossing van de 'retrieved case' direct toe te passen op de 'new case'. Het is echter ook mogelijk dat een CBR-systeem niet één maar meerdere gelijke casussen retrieved. In dit geval kan door middel van een telling vastgesteld worden welke oplossing het vaakst voorkomt en kan deze oplossing toegepast worden op de nieuwe casus. Echter kunnen ook regels ingebouwd worden, om in bepaalde situaties bepaalde oplossingen aan te dragen. Deze opties zijn echter afhankelijk van het domein van het CBR-prototype en de beschikbare data. De aangedragen oplossing wordt vervolgens, buiten het systeem, toegepast op de nieuwe casus. 
 
 #### 3. Revision fase
-Deze fase in een CBR-systeem is optioneel. Nadat de oplossing is toegepast op de nieuwe casus wordt duidelijk of de oplossing werkt of niet. Als de oplossing niet heeft gewerkt kan de nieuwe case opnieuw de CBR-cyclus doorlopen en kan het CBR-systeem een nieuwe oplossing aandragen. Deze nieuwe oplossing wordt vervolgens weer toegepast op de casus. Het is afhankelijk van de contet van het CBR-systeem of deze fase daadwerkelijk plaatsvindt. 
-This step is optional in a CBR system. After the solution has been applied to the new case, it becomes clear over time whether the solution works. In the event that the solution did not work, the case can go through the CBR cycle again. The CBR system can then provide a revised solution for the failed case. This can then be applied to the case outside the system. Whether this step actually takes place depends on the context of the CBR system.
+Deze fase in een CBR-systeem is optioneel. Nadat de oplossing is toegepast op de nieuwe casus wordt duidelijk of de oplossing werkt of niet. Als de oplossing niet heeft gewerkt kan de nieuwe case opnieuw de CBR-cyclus doorlopen en kan het CBR-systeem een nieuwe oplossing aandragen. Deze nieuwe oplossing wordt vervolgens weer toegepast op de casus. Het is afhankelijk van de context van het CBR-systeem of deze fase daadwerkelijk plaatsvindt. 
 
 #### 4. Retain fase
 Als laatste stap in het CBR-systeem kan de nieuwe casus, met de bijbehorende oplossing, toegevoegd worden aan de case base. Dit gebeurt alleen als dit waarde oplevert voor het systeem. Als de nieuwe casus toegevoegd wordt, kan deze casus in de toekomst wanneer er voor nieuwe casussen een oplossing gevonden moet worden, gebruikt worden om een oplossing aan te dragen. Daarnaast kan het CBR-systeem leren van het feit of de oplossing wel of niet succesvol was. OP deze manier leert een CBR-systeem van zijn eigen advies. Het is echter wel belangrijk dat het CBR-systeem niet zijn eigen bias creëert door zijn eigen oplossing te blijven aandragen. In hoeverre dit gebeurt is afhankelijk van het CBR-systeem. 
 
-CBR wordt in erg veel verschillende domeinen toegepast, van helpdesken tot de diagnose van ziektes. Het is een methode die voor zowel klassificatie als regressieproblemen gebruikt kan worden. Bij klassificatie voorspelt het model een klasse en bij regressie voorspelt het modl een nummer. Een voorbeeld van een klassificatieprobleem is het identificeren van spammail. Het CBR-model voorspelt het label: spam of geen spam. Een voorbeeld van regressie is het voorspellen van de omzet van een bedrijf. 
+CBR wordt in erg veel verschillende domeinen toegepast, van helpdesken tot de diagnose van ziektes. Het is een methode die voor zowel classificatie als regressieproblemen gebruikt kan worden. Bij classificatie voorspelt het model een klasse en bij regressie voorspelt het model een nummer. Een voorbeeld van een classificatieprobleem is het identificeren van spammail. Het CBR-model voorspelt het label: spam of geen spam. Een voorbeeld van regressie is het voorspellen van de omzet van een bedrijf. 
 
 # Voordelen en nadelen van CBR
 CBR is wezenlijk anders dan andere methodes die ‘solutions’ kunnen aandragen voor nieuwe
@@ -99,7 +100,7 @@ dat het systeem een oplossing aandraagt. Net als het tweede nadeel is dit vooral
 wanneer het CBR-systeem een hele grote dataset heeft.
 
 # Het ontwikkelen van een CBR-systeem in R
-Er is op dit moment geen CRAN package waarmee een CBR-systeem in R gebouwd kan worden. In 2019 was er een package genaamd  [CaseBasedReasoning](https://cran.r-project.org/web/packages/CaseBasedReasoning/index.html) maar deze is helaas verwijderd van CRAN in oktober 2019. Daarom moeten verschillende packages in R gecombineerd worden om een CBR-systeem te maken, en moet een deel van de code aangepast worden. 
+Er is op dit moment geen CRAN-package waarmee een CBR-systeem in R gebouwd kan worden. In 2019 was er een package genaamd  [CaseBasedReasoning](https://cran.r-project.org/web/packages/CaseBasedReasoning/index.html) maar deze is helaas verwijderd van CRAN in oktober 2019. Daarom moeten verschillende packages in R gecombineerd worden om een CBR-systeem te maken, en moet een deel van de code aangepast worden. 
 
 Het CBR-systeem dat in deze blog wordt uitgelegd maakt gebruik van een KNN-nearest neighbour agoritme om de meest-gelijke casussen te selecteren. Het KNN package dat gebruikt wordt is  [FNN](https://cran.r-project.org/web/packages/FNN/index.html). Dit package bevat code voor een 'Fast Nearest Neighbour Search Algoritm'. Daarnaast bevat de output van het KNN-model ook een index met de meest-gelijke casussen die gebruikt kunnen worden om de gebruiker de meest-gelijke casussen te laten zien. 
 
@@ -129,7 +130,7 @@ Hieronder wordt in zes stappen omschreven hoe er op basis van de Cook County dat
 
 
 ### 1. Normaliseren van data
-Een KNN-algoritme berekent de distance tussen de nieuwe casus en de casussen in de database, en daarom moet de data genormaliseerd worden. Dit moet gebeuren voor zowel de orginele database, als de query casus. Het normaliseren van de database kan eenvoudig met de volgende functie: 
+Een KNN-algoritme berekent de distance tussen de nieuwe casus en de casussen in de database, en daarom moet de data genormaliseerd worden. Dit moet gebeuren voor zowel de originele database, als de query casus. Het normaliseren van de database kan eenvoudig met de volgende functie: 
 
 ```{r normalize data, echo = TRUE}
 # De normalizeringsfunctie
@@ -146,7 +147,7 @@ head(normalized_data, 5)
 ```
 
 ### 2. Het normaliseren van de query
-De query moet ook genormalizeerd worden, maar doet moet gebeuren op basis van de minimale en maximale waarde van de originele dataset. Dit kan op de volgende manier: 
+De query moet ook genormaliseerd worden, maar doet moet gebeuren op basis van de minimale en maximale waarde van de originele dataset. Dit kan op de volgende manier: 
 ```{r normalize query, echo = TRUE}
 data_full <- data %>%
   select(-sentence)
@@ -197,7 +198,7 @@ data_query <- recipe %>%
 ```
 
 ### 4. Berekenen van maximale distance tussen twee punten in database
-Om de similarity te kunnen berekenen, moet de maximale distance in een dataset berekent worden. De similarity van twee punten in een genormalizeerde dataset is namelijk: 1 - (afstand tussen twee punten / maximale afstand). Dit kan in R met behulp van de volgende code:
+Om de similarity te kunnen berekenen, moet de maximale distance in een dataset berekent worden. De similarity van twee punten in een genormaliseerde dataset is namelijk: 1 - (afstand tussen twee punten / maximale afstand). Dit kan in R met behulp van de volgende code:
 
 ```{r maximale distance berkenen}
 max_knn_dist <- function(data) {
@@ -274,7 +275,7 @@ query_results <- query_data %>%
   )
 ```
 
-Vervolgens moet de genormalizeerde database vervangen worden met de niet-genormalizeerde data, omdat de gebruiker de niet-genormalizeerde data nodig heeft. Dit is simpel de eerder gedefineerde data. Vervolgens wordt op basis van de index_knn de meest-gelijke casussen weergegeven aan de gebruiker. Hierbij zijn de kolommen 'soort' en 'similarity' toegevoegd. Similarity bevat de gelijkenis tussen de twee zaken in percentage. 
+Vervolgens moet de genormaliseerde database vervangen worden met de niet-genormaliseerde data, omdat de gebruiker de niet-genormaliseerde data nodig heeft. Dit is simpel de eerder gedefinieerde data. Vervolgens wordt op basis van de index_knn de meest-gelijke casussen weergegeven aan de gebruiker. Hierbij zijn de kolommen 'soort' en 'similarity' toegevoegd. Similarity bevat de gelijkenis tussen de twee zaken in percentage. 
 
 ```{r cbr_results, echo = TRUE}
 # Opslaan van de index_tabel
@@ -293,10 +294,10 @@ print(index)
 print(similarity)
 ```
 
-Vervolgens worden de CBR-resultaten, met de niet-genormalizeerde data, toegevoegd aan een dataframe.
+Vervolgens worden de CBR-resultaten, met de niet-genormaliseerde data, toegevoegd aan een dataframe.
 
 ```{r cbr_resultaten dataframe, echo = TRUE}
-# Maak een dataframe met daarin de CBR-resultaten  o.b.v. de niet-genormalizeerde data
+# Maak een dataframe met daarin de CBR-resultaten  o.b.v. de niet-genormaliseerde data
 results_dataframe <- data %>%
   # selecteren van de index
   slice(index) %>% #
@@ -340,7 +341,7 @@ Zoals te zien is in de resultaten is de aangedragen oplossing voor de query casu
 Naast deze code heb ik een simpele Shiny-applicatie ontwikkeld die deze resultaten weergeeft. [De Shiny-applicatie is hier te vinden](https://sietske97.shinyapps.io/casebased-reasoning-application)
 
 ### Extra functionaliteit: random query generator
-Het CBR-model heeft een 'new case' nodig om te runnen. Deze casus kan handmatig aangemaakt worden of door een gebruiker aangemaakt worden, maar in R kan ook een random query gegenereerd worden. De onderstaande code genereert automatisch een nieuwe casus, gebasseerd op de minimale en maximale waarden van een bestaande dataset.
+Het CBR-model heeft een 'new case' nodig om te runnen. Deze casus kan handmatig aangemaakt worden of door een gebruiker aangemaakt worden, maar in R kan ook een random query gegenereerd worden. De onderstaande code genereert automatisch een nieuwe casus, gebaseerd op de minimale en maximale waarden van een bestaande dataset.
 
 ```{r generate random query, echo = TRUE}
 # Definieer vectors waar minimale en maximale waarde in opgeslagen kunnen worden
