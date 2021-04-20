@@ -353,6 +353,11 @@ pre code {
 
 
 <p>In deze blog leg ik kort uit hoe je in R een case-based reasoning (cbr) systeem kan bouwen. Eerst ga ik kort in op wat cbr is, uit welke fases een CBR-model bestaat en wat de voor- en nadelen van CBR zijn. Vervolgens leg ik uit hoe in R, op basis van de sentence dataset, een simpel cbr-model gebouwd kan worden.</p>
+<p><strong>Resources voor de blog</strong></p>
+<ul>
+<li><p>Shinyapp: Ik heb ook een Shiny-app ontwikkeld, welke de output van het CBR-model weergeeft. Deze Shinyapp is te vinden via onderstaande link: <a href="https://sietske97.shinyapps.io/casebased-reasoning-application" class="uri">https://sietske97.shinyapps.io/casebased-reasoning-application</a></p></li>
+<li><p>Repository met code: De code voor deze repository is ook op GitHub te vinden via onderstaande URL: <a href="https://github.com/sietske97/casebased-reasoning-application" class="uri">https://github.com/sietske97/casebased-reasoning-application</a></p></li>
+</ul>
 <div id="wat-is-case-based-reasoning" class="section level1">
 <h1>Wat is case-based reasoning?</h1>
 <p>Case-based reasoning is een machine learning methode die een nieuw probleem oplost, op basis van oplossingen van gelijksoortige problemen uit het verleden. Data is in een CBR-systeem altijd gerepresenteerd in een probleem-oplossing vorm: er is een probleem waarvoor een oplossing gevonden moet worden. De oplossing voor het nieuwe probleem kan gevonden worden door in de CBR-database te zoeken naar oude, soortgelijke problemen. De oplossing van dit gelijksoortig oude probleem kan vervolgens toegepast worden op het nieuwe probleem. Dit kan het nieuwe probleem oplossen.</p>
@@ -408,7 +413,7 @@ pre code {
 <h1>Het ontwikkelen van een CBR-systeem in R</h1>
 <p>Er is op dit moment geen CRAN package waarmee een CBR-systeem in R gebouwd kan worden. In 2019 was er een package genaamd <a href="https://cran.r-project.org/web/packages/CaseBasedReasoning/index.html">CaseBasedReasoning</a> maar deze is helaas verwijderd van CRAN in oktober 2019. Daarom moeten verschillende packages in R gecombineerd worden om een CBR-systeem te maken, en moet een deel van de code aangepast worden.</p>
 <p>Het CBR-systeem dat in deze blog wordt uitgelegd maakt gebruik van een KNN-nearest neighbour agoritme om de meest-gelijke casussen te selecteren. Het KNN package dat gebruikt wordt is <a href="https://cran.r-project.org/web/packages/FNN/index.html">FNN</a>. Dit package bevat code voor een ‘Fast Nearest Neighbour Search Algoritm’. Daarnaast bevat de output van het KNN-model ook een index met de meest-gelijke casussen die gebruikt kunnen worden om de gebruiker de meest-gelijke casussen te laten zien.</p>
-<p>Het CBR-systeem maakt gebruikt van een open dataset, de <strong>cook county dataset</strong> die gedownload kan worden van de <a href="link%20to%20cook%20county">website van de Cook County Government</a>.De dataset bevat een groot aantal records van veroordelingen en de bijbehorende straf. De straffen zijn opgedeeld in twee opties: <strong>non-dentention</strong>, zoals een taakstraf, en <strong>detention</strong>, zoals een gevangenisstraf.</p>
+<p>Het CBR-systeem maakt gebruikt van een open dataset, de <strong>cook county dataset</strong> die gedownload kan worden van de <a href="https://datacatalog.cookcountyil.gov/Courts/Sentencing/tg8v-tm6u">website van de Cook County Government</a>.De dataset bevat een groot aantal records van veroordelingen en de bijbehorende straf. De straffen zijn opgedeeld in twee opties: <strong>non-dentention</strong>, zoals een taakstraf, en <strong>detention</strong>, zoals een gevangenisstraf.</p>
 <p><strong>De data en code voor het CBR-model kan gevonden worden in de <a href="code%20to%20repository">case-based reasoning GitHub repository</a></strong></p>
 <div id="de-gebruikte-packages-dataset-en-query-casus" class="section level2">
 <h2>De gebruikte packages, dataset en query casus</h2>
@@ -738,7 +743,7 @@ for (i in 1:ncol(data)) {
 query_data &lt;- data %&gt;%
   rbind(random_level) %&gt;%
   tail(1) %&gt;%
-  mutate_if(is.character, as.numeric) %&gt;%
+  mutate_if(is.character, as.numeric) %&gt;% 
   mutate(sentence = &quot;&quot;)
 
 # Dit is de random-gegenereerde query
@@ -746,7 +751,7 @@ head(query_data, 1)</code></pre>
 <pre><code>## # A tibble: 1 x 11
 ##   case_id charge_count charge_disposit~ sentence_court_~ length_of_case_~
 ##     &lt;dbl&gt;        &lt;dbl&gt; &lt;fct&gt;            &lt;fct&gt;                       &lt;dbl&gt;
-## 1 7.14e11           20 Finding Guilty   District 6 - Ma~                0
+## 1 7.14e11           20 Verdict Guilty   District 4 - Ma~                0
 ## # ... with 6 more variables: age_at_incident &lt;dbl&gt;, gender &lt;fct&gt;,
 ## #   offense_category &lt;fct&gt;, days_incident_arrest &lt;dbl&gt;, sentence &lt;chr&gt;,
 ## #   convicted_chicago &lt;fct&gt;</code></pre>

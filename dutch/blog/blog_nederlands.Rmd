@@ -24,6 +24,11 @@ query_data <- query_data %>%
 
 In deze blog leg ik kort uit hoe je in R een case-based reasoning (cbr) systeem kan bouwen. Eerst ga ik kort in op wat cbr is, uit welke fases een CBR-model bestaat en wat de voor- en nadelen van CBR zijn. Vervolgens leg ik uit hoe in R, op basis van de sentence dataset, een simpel cbr-model gebouwd kan worden.
 
+**Resources voor de blog**
+
+* Shinyapp: Ik heb ook een Shiny-app ontwikkeld, welke de output van het CBR-model weergeeft. Deze Shinyapp is te vinden via onderstaande link: https://sietske97.shinyapps.io/casebased-reasoning-application
+* Repository met code: De code voor deze repository is ook op GitHub te vinden via onderstaande URL: https://github.com/sietske97/casebased-reasoning-application
+
 # Wat is case-based reasoning? 
 Case-based reasoning is een machine learning methode die een nieuw probleem oplost, op basis van oplossingen van gelijksoortige problemen uit het verleden. Data is in een CBR-systeem altijd gerepresenteerd in een probleem-oplossing vorm: er is een probleem waarvoor een oplossing gevonden moet worden. De oplossing voor het nieuwe probleem kan gevonden worden door in de CBR-database te zoeken naar oude, soortgelijke problemen. De oplossing van dit gelijksoortig oude probleem kan vervolgens toegepast worden op het nieuwe probleem. Dit kan het nieuwe probleem oplossen. 
 
@@ -98,12 +103,12 @@ Er is op dit moment geen CRAN package waarmee een CBR-systeem in R gebouwd kan w
 
 Het CBR-systeem dat in deze blog wordt uitgelegd maakt gebruik van een KNN-nearest neighbour agoritme om de meest-gelijke casussen te selecteren. Het KNN package dat gebruikt wordt is  [FNN](https://cran.r-project.org/web/packages/FNN/index.html). Dit package bevat code voor een 'Fast Nearest Neighbour Search Algoritm'. Daarnaast bevat de output van het KNN-model ook een index met de meest-gelijke casussen die gebruikt kunnen worden om de gebruiker de meest-gelijke casussen te laten zien. 
 
-Het CBR-systeem maakt gebruikt van een open dataset, de  **cook county dataset** die gedownload kan worden van de [website van de Cook County Government](link to cook county).De dataset bevat een groot aantal records van veroordelingen en de bijbehorende straf. De straffen zijn opgedeeld in twee opties: **non-dentention**, zoals een taakstraf, en **detention**, zoals een gevangenisstraf.
+Het CBR-systeem maakt gebruikt van een open dataset, de  **cook county dataset** die gedownload kan worden van de [website van de Cook County Government](https://datacatalog.cookcountyil.gov/Courts/Sentencing/tg8v-tm6u).De dataset bevat een groot aantal records van veroordelingen en de bijbehorende straf. De straffen zijn opgedeeld in twee opties: **non-dentention**, zoals een taakstraf, en **detention**, zoals een gevangenisstraf.
 
-**De data en code voor het CBR-model kan gevonden worden in de [case-based reasoning GitHub repository](code to repository)**
+**De data en code voor het CBR-model kan gevonden worden in de [case-based reasoning GitHub repository](https://github.com/sietske97/casebased-reasoning-application)**
 
 ## De gebruikte packages, dataset en query casus
-Hieronder worden de eerste tien rijen van de sentence database weergegeven. De data is op verschillende plekken opgeschoond en er is een steekproef genomen van 5% om ervoor te zorgen dat de webapplicatie niet té langzaam wordt. In de webapplicatie wordt onder de tab 'de gebruikte dataset' uitgelegd op welke manier de originele dataset is opgeschoond. 
+Hieronder worden de eerste tien rijen van de sentence database weergegeven. De data is op verschillende plekken opgeschoond en er is een steekproef genomen van 5% om ervoor te zorgen dat de webapplicatie niet té langzaam wordt. In de webapplicatie wordt onder de tab 'de gebruikte dataset' uitgelegd op welke manier de originele dataset is opgeschoond. [De dataset kan gedownload worden via de GitHub repository](https://github.com/sietske97/casebased-reasoning-application/tree/master/dutch/data)
 
 ```{r head data, echo = TRUE}
 # Dit zijn de libraries die gebruikt worden

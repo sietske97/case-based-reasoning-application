@@ -9,7 +9,7 @@ Een versie van deze app is gehost via shinyapps.io en kan bekeken worden via de 
 Om de app vanuit Rstudio te runnen, zonder dat je deze repository hoeft te clonen, run je de volgende code:
 
 ```{run app local, echo = TRUE}
-runGitHub("casebased-reasoning-application", "sietske97")
+runGitHub("casebased-reasoning-application/dutch", "sietske97")
 ```
 
 # Inhoud van de mappen

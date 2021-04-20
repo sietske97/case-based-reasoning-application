@@ -1,0 +1,353 @@
+---
+title: "Case-based Reasoning in R"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source("R/01_libraries.R")
+source("R/02_functions.R")
+data <- read_training_data()
+
+query_data <- data %>%
+  slice(1)
+
+query_data[1, 2] <- 15
+query_data[1, 5] <- 1
+query_data[1, 6] <- 23
+query_data[1, 9] <- 3
+
+query_data <- query_data %>%
+  mutate(sentence = "") # sentence has to be empty, because the model will predict this value
+```
+
+In this blog I will briefly explain how you can build a case-based reasoning (cbr) system in R. First I will briefly discuss what CBR is, which phases a CBR model consists of and what the advantages and disadvantages of CBR are. Then I explain how a simple cbr model can be built in R, based on the sentence dataset.
+
+**Resources voor de blog**
+
+* Shinyapp: I have developed a shiny-app which displays the output of the CBR-model. This shiny app can be found on the following webpage:  https://sietske97.shinyapps.io/casebased-reasoning-application-english
+*Repository with code: The R-code can be found in the following repository: https://github.com/sietske97/casebased-reasoning-application
+
+# What is case-based reasoning?
+CBR is an artificial intelligence method in which new problems are solved based on solutions to similar problems from the past. Data in a CBR system is therefore always presented in problem-solution format: there is a problem for which a solution must be found. The solution can be found by searching the CBR database for old comparable solutions. Then the solution of a similar old problem can be applied to the new problem, and the new problem is solved.
+
+# The CBR cyclus
+A CBR system consists of four different phases: the retrieve, reuse, revise and retain phases. These four phases together form the CBR cycle. By going through these four steps, a new solution can be proposed for the new problem. The four different CBR phases are briefly described below. This cycle is show in the following image: 
+
+![Figure 1: The CBR-cyclus](cbr_cyclus.png)
+
+#### 1. Retrieve phase
+The cycle of CBR starts with a new problem, the 'current problem'. Subsequently, the case base, which contains all old cases, is searched for similar cases. This is done using an algorithm that calculates the distance and similarity between the new and old case with a distance measure. Various algorithms can be used for this, but a KNN algorithm is used in the prototype that has been developed. Next, the closest old cases are retrieved and displayed to the user.
+
+#### 2. Reuse phase
+Based on the "retrieved case", a solution for the new case is proposed. This can be done in various ways. The simplest method is to apply the "retrieved case" solution directly to the "new case". However, it is also possible to choose not to return one old case, but several. In that case, by means of a vote, the solution that most old cases had, it can be determined which solution is applied to the new case. Here too, there are many more options, which depend on the available data and the domain of the CBR prototype. The solution is then applied to the new case outside the system.
+
+#### 3. Revision phase
+This step is optional in a CBR system. After the solution has been applied to the new case, it becomes clear over time whether the solution works. In the event that the solution did not work, the case can go through the CBR cycle again. The CBR system can then provide a revised solution for the failed case. This can then be applied to the case outside the system. Whether this step actually takes place depends on the context of the CBR system.
+
+#### 4. Retain phase
+As a final step in the CBR system, the new case, with accompanying solution, can be added to the case base if this provides value for the system. If the new case is added, cases looking for a solution in the future can also learn from the solution of the new case, which was successful or not. In this way, a CBR system can learn from its own advice. It's important to make sure the system doesn't create its own bias by storing its own stuff. The risk of this differs per system.
+
+Because new problems can be added to the case base after they have gone through the CBR cycle, the CBR system can learn from new problems. In addition, CBR is applied in many different domains, from a helpdesk to the diagnosis of a disease. It is a method that can be used for both classification and regression problems. In classification, the model predicts a class, and in regression, the model predicts a number. An example of a classification problem is the identification of spam emails. The CBR model then predicts which label, spam or non-spam, the new problem belongs to. An example of a regression problem is predicting the turnover of a company.
+
+# Advantages and disadvantages of CBR compared to other methods
+CBR is fundamentally different from other methods that can provide "solutions" for new problems, because CBR is based on reasoning based on one or more cases in the case base, contrary to generalist patterns found in the database. In this capacity, there are also some advantages to the use of CBR. There are also some drawbacks to the use of a CBR system. The main advantages and disadvantages are briefly explained below.
+
+#### Advantages of CBR
+1. A CBR system is more intuitive than other algorithms. This makes the operation of a CBR system easier to understand. The user of the system sees not only a proposed solution, but also the old cases in the case base on which this solution is based. This operation is much more like human problem solving than a model that only gives an output.
+2. Solutions presented by the CBR model are justified by precedent. The solutions have already been applied in the real world. Although this was a different case, the CBR system is based on solutions that have already been applied once. It is important to know whether the solution to the old cases was successful.
+3. The CBR system can learn from bad solutions. If it is known whether the solutions of the cases in the case base were successful or not, the system can include the operation of the solution in proposing a solution for the new case.
+4. CBR can be applied in many different domains due to the flexible application and representation of reality in a problem-solution definition.
+
+#### Disadvantages of CBR
+1. A CBR system is only of value if it is able to select relevant cases from the case base during the "retrieval" phase. There are many types of distance measurements that can be used for this. Since the effectiveness of a CBR system depends on the accuracy of the retrieval phase, there must be sufficient knowledge about different types of distance measurements and their operation.
+2. Adjusting the old solution so that it works for the new problem during the "reuse" phase can be difficult. How and whether the solution is adapted is context-dependent, but in complex domains it will not be possible to adopt the old solution 1 on 1 for the new problem. In these cases, rules will have to be built into the CBR system itself to adjust the solution for the new case.
+3. All old cases must be stored in the case base. With other methods, a model is trained on a trainset, and then only the model needs to be saved. Saving cases is not a problem for small datasets, but when there are millions of old cases, this can be an obstacle. A solution is to make a selection in such cases from old cases that are representative of the entire dataset and only store these in the CBR system.
+4. Because the CBR system is not trained, but only makes calculations when the new case goes through the CBR cycle, it may take longer for the system to come up with a solution in the case of large data sets. Like the second disadvantage, this is especially disadvantageous when the CBR system has a very large data set. 
+
+# Building a CBR-system in R
+There is currently no CRAN package that contains code that can be used to built a CBR-system. In 2019, there was a package called [CaseBasedReasoning](https://cran.r-project.org/web/packages/CaseBasedReasoning/index.html) but unfortunately it was removed from CRAN in October 2019. Therefore, if you want to build a CBR-system you have to make all the code yourself, or use existing packages that can help you build a system.
+
+The CBR-system that is explained in this article uses a KNN-nearest neighbours algorithm in to retrieve the most-similar cases. THe KNN package that is used is [FNN](https://cran.r-project.org/web/packages/FNN/index.html). This package contains code for a Fast Nearest Neighbour Search Algoritm. Additionally, the output of the KNN-model also contain an index with the most-similar cases that can be used to show the used of the model the most-similar cases. 
+
+The prototype CBR-system that has been build makes use of an open dataset, called the **cook county dataset** which can be downloaded from the [website of the Cook County Government](https://datacatalog.cookcountyil.gov/Courts/Sentencing/tg8v-tm6u). The dataset contains a large number of records of lawsuit, and the corresponding sentence. The sentence have been reduced to two options: **non-detention** and **detention**.
+
+**The data and code for this CBR-model can be found in the [case-based reasoning GitHub repository](https://github.com/sietske97/casebased-reasoning-application)**
+
+## The used packages, dataset and query case
+The first ten rows of the sentence database are shown below. The data has been cleaned up in various places and a sample of 5% has been taken to ensure that the web application does not become too slow. In the web application, the 'used dataset' tab explains how the original dataset was cleaned up. [The dataset that is used can be found in the GitHub repository](https://github.com/sietske97/casebased-reasoning-application/tree/master/english/data)
+
+```{r head data, echo = TRUE}
+# This are the packages that are used
+library(dplyr)
+library(readr)
+library(recipes)
+library(FNN)
+
+# The first five observations of the cleaned dataset. 
+head(data, 5)
+
+# This is the example query data, for which the CBR-model predicts the new sentence
+head(query_data, 5)
+```
+
+## The CBR Model
+Below is a six-step description of how a simple CBR model is built based on the Cook County dataset that goes through the first two steps of the CBR cycle.
+
+### 1. Normalizing the data
+A KNN algorithm calculates the distance between the new case and the cases in the database, and therefore the data must be normalized. This must be done for both the original database and the query case. Normalizing the database is easy with the following function:
+
+```{r normalize data, echo = TRUE}
+# The normalize function
+normalize <- function(x) {
+  (x - min(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
+}
+
+# Apply the function to the dataset
+normalized_data <- data %>%
+  mutate_if(is.numeric, normalize)
+
+# Het resultaat van de genormaliseerde dataset
+head(normalized_data, 5)
+```
+
+### 2. Normalizing the query data
+The query must also be normalized, but it must be done based on the minimum and maximum value of the original dataset. This can be done in the following way:
+```{r normalize query, echo = TRUE}
+data_full <- data %>%
+  select(-sentence)
+
+normalized_query <- sapply(names(data_full), function(col) {
+  if (is.factor(query_data[[col]])) {
+    as.character(query_data[[col]])
+  }
+  else {
+    (query_data[[col]] - min(query_data[[col]])) /
+      (max(data_full[[col]]) - min(data_full[[col]]))
+  }
+})
+
+query_data_normalized <- data_full %>%
+  rbind(normalized_query) %>%
+  mutate_if(is.character, as.numeric) %>%
+  tail(1) %>%
+  select(-gender, -case_id) %>%
+  mutate(sentence = as.factor(1))
+```
+
+
+### 3. Create dummy variables using recipe package
+Subsequently, dummy variables are created using the recipes package. Then this recipe is applied to the query data.
+```{r bake recipe, echo = TRUE}
+# Create the recept to predict sentence
+recipe <-
+  recipe(sentence ~ .,
+    data = normalized_data
+  ) %>%
+  step_dummy(charge_disposition) %>%
+  step_dummy(sentence_court_name) %>%
+  step_dummy(offense_category) %>%
+  step_dummy(convicted_chicago) %>%
+  prep()
+
+# Bake the recipe with the use of normalized data
+data_knn <- recipe %>%
+  bake(normalized_data) %>%
+  # non-prediction variables have to be deleted
+  select(-case_id, -gender)
+
+# Bake the query case with the recipe
+data_query <- recipe %>%
+  bake(query_data_normalized) %>%
+  select(-sentence)
+```
+
+### 4. Calculate the maximum distance between two points in the database
+To calculate the similarity, the maximum distance in a dataset must be calculated. The similarity of two points in a normalized dataset is namely: 1 - (distance between two points / maximum distance). This can be done in R using the following code:
+
+```{r maximale distance berkenen}
+max_knn_dist <- function(data) {
+  no_col <- ncol(data)
+  row_nul <- rep(0, no_col)
+  row_one <- rep(1, no_col)
+  tibble <- as_tibble(row_nul) %>%
+    cbind(row_one)
+  tibble <- t(tibble)
+  test_knn <- tibble
+  train_knn <- tibble
+  max_dist <- FNN::get.knnx(
+    data = train_knn,
+    query = test_knn,
+    k = 2
+  )
+  max_dist <- max(max_dist$nn.dist)
+
+  return(max_dist)
+}
+
+# Maximal distance of the data
+max_dist <- max_knn_dist(data = data)
+```
+
+### 5. Fast Nearest Neighbour Search with the package FNN
+Subsequently, a nearest neighbor search is performed using the FNN package. In this function, the database is called the 'train' and the query data is called the 'test' case.
+
+```{r knn search, echo = TRUE}
+# Delete the predicted sentence
+data_zonder_label <- data_knn %>%
+  select(-sentence)
+
+knn_results <- FNN::knn(
+  # Train set is the database without label
+  train = data_zonder_label,
+  # Test set is the query data
+  test = data_query,
+  # Class is the sentence column of the dataset
+  cl = data$sentence,
+  # K is the number of nearest neighbours
+  k = 15,
+  # Algorithm is method that KNN uses to search
+  algorithm = "brute",
+  # Prob shows the probability of the class
+  prob = TRUE
+)
+```
+
+
+### 6. The CBR system based on KNN results
+A CBR system can then be built with the output of the KNN model. The FNN::knn () function outputs a distance matrix with the distance between the query data and the test data. In addition, the package provides an index of the most similar cases and the predicted class of the query case with the probability. Below is explained how first the similarity between the query case and database can be calculated based on the maximum distance calculated in step four.
+
+```{r cbr model, echo = TRUE}
+# Save the various attributes of knn_results in a seperate object
+knn_attributes <- attributes(knn_results)
+
+# Calculate the similarity based on the distance 
+# knn_attributes$nn.dist is de distance between the query case and database caes
+distance_knn <- t(knn_attributes$nn.dist)
+
+# Divided the distance by the maximum distance
+similarity_knn <- as_tibble(1 - (distance_knn / max_dist))
+```
+
+Then three columns are added to the query_data: a similarity column, a sentence column for the solution and a category column ('query' or 'train_set').
+
+```{r sentence toevoegen, echo = FALSE}
+# Add kolom similarity, sentence and category to combine the query_results to the database cases
+query_results <- query_data %>%
+  mutate(
+    similarity = NA,
+    sentence = NA,
+    category = "query"
+  )
+```
+
+Subsequently, the normalized database must be replaced with the non-normalized data, because the user needs the non-normalized data. This is simply the previously defined data. Then, based on the index_knn, the closest cases are displayed to the user. The columns 'category' and 'similarity' have been added to this. Similarity contains the similarity between the two cases in percentage.
+
+```{r cbr_results, echo = TRUE}
+# Save the index table
+index_knn <- as_tibble(t(knn_attributes$nn.index))
+
+# Select the right element from the index_knn and similarity_knn table 
+index <- index_knn[[1]]
+similarity <- similarity_knn[[1]]
+```
+
+The index vector contains the index numbers of the cases in the database that are the most similar, and the similarity vector contains the correspondence between the query case and the case from the database in percentages.
+
+```{r distance and similarity vector, echo = TRUE}
+# The index and distance vector look like this
+print(index)
+print(similarity)
+```
+
+Subsequently, the CBR results, with the non-normalized data, are added to a data frame.
+
+```{r cbr_resultaten dataframe, echo = TRUE}
+# Make a dataframe with the CBR-results, based on the non-normalized data
+results_dataframe <- data %>%
+  # select the index cases
+  slice(index) %>% #
+  # Add a similarity column
+  cbind(similarity = similarity) %>%
+  # Add category column to make visible which case is the query case and which cases are the train cases
+  mutate(category = "train_set") %>%
+  # Add the results to the query 
+  rbind(query_results) %>%
+  # Arrange by category 
+  arrange(category) %>%
+  # Relocate columns; show category and similarity first 
+  relocate(category, similarity, sentence, gender)
+
+# Select the proposed solution
+class_query <- levels(knn_results)
+
+# Output the results in a list
+results <- list(
+  "results_dataframe" = results_dataframe,
+  "class" = class_query,
+  "probability" = knn_attributes$prob
+)
+```
+
+The results list contains a results_dataframe with a visual representation of the most similar cases of the query case, the resolution of these cases and a similarity percentage. The 'class' element is a vector with the proposed solution, and the 'probability' is the percentage of nearest neighbors that this class has. This percentage is always at least 50%. The results look like this:
+
+```{r results cbr, echo = TRUE}
+# This is the dataframe which displayes similarity between the nearest neighbours and query case
+print(results$results_dataframe)
+
+# This is the proposed solution by the CBR-system
+print(results$class)
+
+# This is the percentage of nearest neighbours that has the proposed solution
+print(results$probability)
+```
+
+As can be seen in the results, the suggested solution for the query is casus ** detention ** because 73% of the nearest neighbors had this class.
+
+In addition to this code, I have developed a simple Shiny application that displays these results. [The Shiny application can be found here](https://sietske97.shinyapps.io/casebased-reasoning-application-english)
+
+### Extra functionality: random query generator
+The CBR model needs a 'new case' to run. This case can be created manually or created by a user, but a random query can also be generated in R. The code below automatically generates a new case, based on the minimum and maximum values of an existing dataset.
+
+```{r generate random query, echo = TRUE}
+# Define vectors that can store minimum and maximum values
+min_value <- NULL
+max_value <- NULL
+levels <- NULL
+random_level <- NULL
+value <- NULL
+
+# For loop that selects the minimum and maximum value for each numeric column and the levels for categorical variables
+for (i in 1:ncol(data)) {
+  if (!(is.numeric(data[[i]]))) {
+    min_value[[i]] <- NA
+    max_value[[i]] <- NA
+    levels[[i]] <- levels(data[[i]])
+  } else {
+    min_value[[i]] <- min(data[[i]])
+    max_value[[i]] <- max(data[[i]])
+    levels[[i]] <- levels(data[[i]])
+  }
+}
+
+# for loop that selects a random level for each categorical variable and a random value between min and max value for each numeric value
+for (i in 1:ncol(data)) {
+  if (is.na(min_value[i])) {
+    all_level <- levels[[i]]
+    random_level[[i]] <- sample(all_level, 1)
+  } else {
+    a <- c(min_value[[i]], max_value[[i]])
+    random_level[[i]] <- sample(a, 1)
+  }
+}
+
+# the query data is merged with the entire database to properly set the different levels of categorical variables. Then only the query case is selected.
+query_data <- data %>%
+  rbind(random_level) %>%
+  tail(1) %>%
+  mutate_if(is.character, as.numeric) %>%
+  mutate(sentence = "")
+
+# This is the randomly generated query
+head(query_data, 1)
+```

@@ -1,14 +1,14 @@
 #------------------------------------------#
 ## User- defined functies 
 #------------------------------------------#
-## read_and_clean_data 
-# Deze functie leest het data.csv bestand en schoont deze data op,
-# onder meer factors van variabelen rechttrekken
+## read_and_clean_data
+# This function reads the data.csv file and cleans this data,
+# Straighten factors of variables, among other things
 read_training_data <- function(){
-  # inlezen van data
+  # reading of data
   data <- read_csv("data/data.csv")
   
-  # omzetten naar factor van character 
+  # Change factor to character
   to_factor <- c("charge_disposition", "sentence_court_name", "gender", "offense_category", "sentence", "convicted_chicago")
   
   data <- data %>%
@@ -20,19 +20,19 @@ read_training_data <- function(){
 
 #------------------------------------------#
 ## cbr_model
-# Deze functie runt een cbr_model over de door de user ingevoerde
-# query. De database is de output van read_training_data
-# k is aantal nearest-neighbours en methode is de methode
-# van het KNN algoritme. De output is een lijst met het results_dataframe
-# met daarin de query casus en de meest-soortgelijke casussen
-# uit de trainings_data, de voorspelde class en de probability
-# van deze voorspelde class.
+# This function runs a cbr_model over the user entered
+# query. The database is the output of read_training_data
+# k is number of nearest neighbors and method is method
+# of the KNN algorithm. The output is a list of the results_dataframe
+# containing the query case and the most-similar cases
+# from the training_data, the predicted class and the probability
+# of this predicted class.
 
 cbr_model <- function(database,
                       query,
                       k,
                       methode = c("kd_tree", "cover_tree", "brute")) {
-  #normalizeren van trainingsdata
+  #normalize training data
   normalize <- function(x) {
     (x - min(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
   }
@@ -60,7 +60,7 @@ cbr_model <- function(database,
     select(-gender, -case_id) %>%
     mutate(sentence = as.factor(1))
   
-  # Bak de query a.d.h.v. het recept van de data waarop CBR systeem gemaakt moet worden
+  # Bake the query using the recipe of the data on which the CBR system must be made
   recipe <-
     recipe(sentence ~ .,
            data = database) %>%
@@ -74,7 +74,7 @@ cbr_model <- function(database,
   data_query <- recipe %>%
     bake(query_data_normalized)
   
-  # definieren van data voor KNN
+  # Define data for KNN
   train_knn <- recipe %>% 
     bake(database_nzd) %>% 
     select(-sentence, -case_id, -gender)
@@ -82,9 +82,9 @@ cbr_model <- function(database,
   query_knn <- data_query %>%
     select(-sentence)
   
-  # bereken de maximale distance van een dataset tussen twee datapunten (0,0) vs
-  # (1,1) voor alle variabelen. De totale distance van punten gaat gedeeld door
-  # dit aantal om het in een percentage uit te kunnen drukken
+  # calculate the maximum distance of a dataset between two data points (0,0) vs
+  # (1,1) for all variables. The total distance of points is divided by
+  # this number to express it as a percentage
   max_knn_dist <- function(data) {
     no_col <- ncol(data)
     row_nul <- rep(0, no_col)
@@ -104,53 +104,61 @@ cbr_model <- function(database,
     return(max_dist)
   }
   
-  # maximale distance wordt berekend op basis van de train set
+  # maximum distance is based on training data
   max_dist <- max_knn_dist(train_knn)
   
-  # aparte dataframe voor de klasse van de train data
-  # Dit is het CL-argument van de KNN
+  # separate data frame for the class of the train data
+  # This is the KNN's CL argument
   train_class <- database %>% 
     select(sentence)
-  # Het maken van een KNN model
+  # Rus KNN model
   knn_results <- FNN::knn(train = train_knn,
                           test = query_knn,
-                          cl = train_class$sentence, # dit is de uitkomst van trainingset
-                          k = k, #k wordt in functie gedefinieerd
+                          cl = train_class$sentence, 
+                          k = k, 
                           algorithm = methode,
-                          prob = TRUE) #prob geeft propotion of winning votes voor
+                          prob = TRUE) 
   
   
-  # voorbereiden van CBR-systeem
-  # De verschillende attributes van de knn_results apart opslaan
+  # prepare CBR system
+  # Save the different attributes of the knn_results separately
   knn_attributes <- attributes(knn_results)
-  distance_knn <- t(knn_attributes$nn.dist) #dit is de afstand tussen de query-data en de test data
-  distance_knn <- as_tibble(1 - (distance_knn / max_dist)) #de distance gaat gedeeld door de max_dist
-  index_knn <- as_tibble(t(knn_attributes$nn.index)) #index om nearest neighbours te kunnen localiseren
+  #dit is de afstand tussen de query-data en de test data
+  distance_knn <- t(knn_attributes$nn.dist) 
+  # the distance is divided by the max_dist
+  distance_knn <- as_tibble(1 - (distance_knn / max_dist)) 
+  #index to locate nearest neighbors
+  index_knn <- as_tibble(t(knn_attributes$nn.index)) 
   
-  # kolom similarity, sentence en soort toevoegen om te kunnen samenvoegen met resultaten
+  # add column similarity, sentence and type to be able to merge with results
   query_results <- query_data %>%
     mutate(
       similarity = NA,
       sentence = NA,
-      soort = "query"
+      category = "query"
     )
   
-  # Hier is het nodig om de training set zonder dummy variabelen te gebruiken
-  # De data is genormaliseerd, en daarom moet de dataset die niet genormaliseerd is
-  # ook toegevoegd worden. Dit is data_not_nzd
+  # Here it is necessary to use the training set without dummy variables
+  # The data is normalized, and therefore it must be the dataset that is not normalized
+  # can also be added. This is data_not_nzd
   training_wo_dummies <- database
   
-  # Resultaten van KNN-search weergeven
-  index <- index_knn[[1]] #juiste element selecteren
-  distance <- distance_knn[[1]]  #juiste element selecteren
+  # Results of the KNN_search 
+  index <- index_knn[[1]] 
+  distance <- distance_knn[[1]]
   results_dataframe <- training_wo_dummies %>%
-    slice(index) %>% #selecteer de KNN in de index
-    cbind(similarity = distance) %>% #voeg similarity kolom toe
-    mutate(soort = "train_set") %>% #voeg soort toe zodat in tabel duidelijk is wat de query en train set is
-    rbind(query_results) %>% #voeg resultaten van de query toe
-    arrange(soort) %>% #sorteer bij 'soort' zodat query als eerste te zien is
-    relocate(soort, similarity, sentence, gender) 
-  # 
+    # select KNN index
+    slice(index) %>% 
+    # add similarity column
+    cbind(similarity = distance) %>% 
+    # add "category" to make clear which is the query and which is the test case
+    mutate(category = "train_set") %>% 
+    # Add results to query
+    rbind(query_results) %>% 
+    # Arrange by 'category' to make sure that the query is displayed at first
+    arrange(category) %>% 
+    relocate(category, similarity, sentence, gender) 
+  
   class_query <- class_query <- levels(knn_results)
   
   results <- list("results_dataframe" = results_dataframe,

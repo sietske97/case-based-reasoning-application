@@ -3,12 +3,12 @@ This repository contains a case-based reasoning model Shiny App, with a UI-inter
 
 # How to run the app
 ## Run the app in your browser
-A version of this app is also hosted via shinyapps.io and can be viewed at the following URL: https://sietske97.shinyapps.io/case-based-reasoning-application/
+A version of this app is also hosted via shinyapps.io and can be viewed at the following URL: https://sietske97.shinyapps.io/casebased-reasoning-application-english/
 
 # How to run the app locally
 Run the app from Rstudio, without cloning this repository, by running the following code:
 ```[run app local, echo = TRUE]
-runGitHub("case-based-reasoning-application", "sietske97")
+runGitHub("case-based-reasoning-application/english", "sietske97")
 ```
 
 # Contents of the folders
