@@ -1,5 +1,5 @@
 #------------------------------------------#
-## Libraries laden 
+## Loading libraries
 library(dplyr)
 library(readr)
 library(recipes)

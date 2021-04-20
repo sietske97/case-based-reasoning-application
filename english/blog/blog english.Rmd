@@ -1,12 +1,13 @@
 ---
-title: "Case-based Reasoning in R"
+title: "How to make a Case-based Reasoning system in R"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = '../') 
 knitr::opts_chunk$set(echo = TRUE)
-source("R/01_libraries.R")
-source("R/02_functions.R")
+source("english/R/01_libraries.R")
+source("english/R/02_functions.R")
 data <- read_training_data()
 
 query_data <- data %>%
@@ -26,7 +27,7 @@ In this blog I will briefly explain how you can build a case-based reasoning (cb
 **Resources voor de blog**
 
 * Shinyapp: I have developed a shiny-app which displays the output of the CBR-model. This shiny app can be found on the following webpage:  https://sietske97.shinyapps.io/casebased-reasoning-application-english
-*Repository with code: The R-code can be found in the following repository: https://github.com/sietske97/casebased-reasoning-application
+* Repository with code: The R-code can be found in the following repository: https://github.com/sietske97/casebased-reasoning-application
 
 # What is case-based reasoning?
 CBR is an artificial intelligence method in which new problems are solved based on solutions to similar problems from the past. Data in a CBR system is therefore always presented in problem-solution format: there is a problem for which a solution must be found. The solution can be found by searching the CBR database for old comparable solutions. Then the solution of a similar old problem can be applied to the new problem, and the new problem is solved.
@@ -34,7 +35,7 @@ CBR is an artificial intelligence method in which new problems are solved based 
 # The CBR cyclus
 A CBR system consists of four different phases: the retrieve, reuse, revise and retain phases. These four phases together form the CBR cycle. By going through these four steps, a new solution can be proposed for the new problem. The four different CBR phases are briefly described below. This cycle is show in the following image: 
 
-![Figure 1: The CBR-cyclus](cbr_cyclus.png)
+![Figure 1: The CBR-cyclus](english/blog/cbr_cyclus.png)
 
 #### 1. Retrieve phase
 The cycle of CBR starts with a new problem, the 'current problem'. Subsequently, the case base, which contains all old cases, is searched for similar cases. This is done using an algorithm that calculates the distance and similarity between the new and old case with a distance measure. Various algorithms can be used for this, but a KNN algorithm is used in the prototype that has been developed. Next, the closest old cases are retrieved and displayed to the user.

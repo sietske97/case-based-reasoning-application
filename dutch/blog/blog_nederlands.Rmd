@@ -1,5 +1,5 @@
 ---
-title: "Case-based Reasoning in R"
+title: "Hoe maak je een Case-based Reasoning systeem in R"
 output: html_document
 ---
 
