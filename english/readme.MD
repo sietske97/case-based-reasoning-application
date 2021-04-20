@@ -35,3 +35,6 @@ Data used for uploading the application to the shinyapps.io server
 
 ## www
 The www folder contains additional data that the app needs, such as images, html files and a CSS format file. The .jpg and .png files are images that are loaded into the app. The workflow.html file shows the workflow of the targets, and the mycss.css contains additional formatting for the placement of the lab logo.
+
+## blog
+Contains the markdown documents for the blog about how to build a case-based reasoning model in R. 

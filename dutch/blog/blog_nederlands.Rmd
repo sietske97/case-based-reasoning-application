@@ -4,9 +4,10 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = '../') 
 knitr::opts_chunk$set(echo = TRUE)
-source("R/01_libraries.R")
-source("R/02_functions.R")
+source("dutch/R/01_libraries.R")
+source("dutch/R/02_functions.R")
 data <- read_training_data()
 
 query_data <- data %>%
@@ -29,7 +30,7 @@ Case-based reasoning is een machine learning methode die een nieuw probleem oplo
 # De CBR-cyclus
 Een CBR-systeem bestaat uit vier verschillende fases: the retrieve, reuse, revise and retain fases. Deze vier fasen vormen de CBR-cyclus. Door deze stappen te doorlopen kan een nieuwe oplossing aangedragen worden voor een nieuw probleem. De vier verschillende fases worden hieronder kort omschreven. De CBR-cyclus is te zien op de volgende afbeelding: : 
 
-![**Afbeelding 1: De CBR-cyclus**](www/cbr_cyclus.png)
+![**Afbeelding 1: De CBR-cyclus**](cbr_cyclus.png)
 
 
 #### 1. Retrieve fase
@@ -372,7 +373,7 @@ for (i in 1:ncol(data)) {
 query_data <- data %>%
   rbind(random_level) %>%
   tail(1) %>%
-  mutate_if(is.character, as.numeric) %>%
+  mutate_if(is.character, as.numeric) %>% 
   mutate(sentence = "")
 
 # Dit is de random-gegenereerde query

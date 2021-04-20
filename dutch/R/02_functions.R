@@ -6,7 +6,7 @@
 # onder meer factors van variabelen rechttrekken
 read_training_data <- function(){
   # inlezen van data
-  data <- read_csv("data/data.csv")
+  data <- read_csv("dutch/data/data.csv")
   
   # omzetten naar factor van character 
   to_factor <- c("charge_disposition", "sentence_court_name", "gender", "offense_category", "sentence", "convicted_chicago")

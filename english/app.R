@@ -1,29 +1,27 @@
 #------------------------------------------#
-## sourcen van libraries, functies en defining values
-## die gebruikt worden in de app ##
+## sourcing of files for libraries and functions
 source("R/01_libraries.R")
 source("R/02_functions.R")
 source("R/03_defining_values.R")
 
 #------------------------------------------#
-## interface van de app ##
+## interface of the app ##
 ui <- fluidPage(
   theme = shinytheme("cosmo"),
   column(
     width = 12,
     div(style = "height:50px")
   ),
-  # Titel van de applicatie
-  # Moet in column omdat anders de titel niet dikgedrukt kan
+  # Title of application
   column(
     width = 12,
     style = "font-weight: bold",
     titlePanel(
-      title = "Case-Based Reasoning webapplicatie om 'sentence' te voorspellen"
+      title = "Case-Based Reasoning application"
     )
   ),
 
-  # Wachtbalk als de applicatie aan het laden is
+  # Loading balk if application is loading
   tags$head(tags$style(type = "text/css", "
              #loadmessage {
                position: fixed;
@@ -44,116 +42,98 @@ ui <- fluidPage(
     tags$div("Loading...", id = "loadmessage")
   ),
   tabsetPanel(
-    # Horizontale tabs
+    # Horizontal tabs
     tabPanel(
-      # Eerste horizontale tab met algemene informatie
-      title = tags$h4(tags$strong("Algemene informatie")),
+      # First horizontal tab with general information
+      title = tags$h4(tags$strong("General information")),
       navlistPanel(
-        # Verticale tabs op pagina 'algemen informatie'
+        # Vertical tabs
         tabPanel(
-          # Eerste verticale tab op algemene informatie pagina
-          # Introductie tab met algemene informatie over de applicatie
-          title = tags$h4("Introductie"),
-          tags$h2(tags$strong("Introductie")),
+          title = tags$h4("Introduction"),
+          tags$h2(tags$strong("Introduction")),
           fluidRow(
             column(
               width = 6,
-              tags$h4(tags$strong("Wat is het doel van deze applicatie?")),
-              tags$p("Het doel van deze applicatie is om de werking - en bijbehorende waarde -
-                  van een Case-Based Reasoning (CBR) systeem te tonen."),
-              tags$h4(tags$strong("Wat voorspelt het model?")),
-              tags$p("Het model voorspelt (classificeert) voor nieuwe zaken het type veroordeling 
-                 dat de verdachte van de nieuwe zaak waarschijnlijk krijgt: detention of non-detention. 
-                 Detention zijn voornamelijk gevangenisstraffen en non-detention
-                 zijn veroordelingen zoals een taakstraf. Er wordt gebruik gemaakt van een openbare dataset met
-                 daarin alle veroordelingen in een bepaald district in Amerika. Als output genereert het model
-                 een klasse (detention of non-detention) en bijbehorende probability, en een lijst met meest-vergelijkbare
-                 oude veroordelingen en een similarity score tussen de query casus en de oude casus.")
+              tags$h4(tags$strong("What is the goal of this application?")),
+              tags$p("The goal of this application is to show the operation and associated value of a Case-Based Reasoning system."),
+              tags$h4(tags$strong("What does the model predict??")),
+              tags$p("The model predicts (classifies) for new cases the type of conviction that the suspect of the new case is likely to receive: detention or non-detention. Detention is mainly imprisonment and non-detention is convictions such as community service. A public dataset is used containing all convictions in a certain district in America. As output, the model generates a class (detention or non-detention) and associated probability, and a list of most-comparable old convictions and a similarity score between the query case and the old case.")
             ),
             column(
               width = 6,
-              tags$h4(tags$strong("Wat zijn de functionaliteiten van de app?")),
-              tags$p("Deze applicatie bestaat uit twee hoofdonderdelen: een tab met 'algemene informatie' en een tab met 'genereer query'"),
+              tags$h4(tags$strong("What are the functionalities of the app")),
+              tags$p("This application consists of two tabs: a tab with 'general information' and a tab with 'generate query'"),
               tags$p(""),
-              tags$p("Onder de 'algemene informatie' tab is informatie over CBR, de gebruikte testdata en het gebruikte CBR-model te vinden. Onder het kopje
-                  'wat is CBR' wordt algemene uitleg gegeven over een CBR systeem. Onder het kopje 'gebruikte testset'
-                  wordt de gebruikte testset beschreven, en het kopje 'gebruikte CBR model' weergeeft hoe het model tot
-                  stand is gekomen en bevat wat algemene gegevens (accuracy e.d.) van het model."),
+              tags$p("Under the 'general information' tab you can find information about CBR, the test data used and the CBR model used. Under the cup
+                   'what is CBR' is a general explanation of a CBR system. Under the heading 'used test set'
+                   the used test set is described, and the heading 'used CBR model' indicates how the model was created
+                   has been established and contains some general data (accuracy, etc.) of the model."),
               tags$p(""),
-              tags$p("Onder de genereer query tab kun je zelf het CBR-model uitproberen. Je hebt hier drie mogelijkheden:
-                 je kunt hier zelf waarden invoeren voor alle variabelen, je kunt het systeem een random observatie
-                  laten genereren of je kunt een .csv bestand uploaden met daarin een nieuwe observatie. De resulaten
-                 van deze query verschijnen ook op dit tabblad.")
+              tags$p("Under the generate query tab you can try out the CBR model yourself. You have three options here:
+                  you can enter values for all variables yourself, you can give the system a random observation
+                   generated or you can upload a .csv file containing a new observation. The results
+                  of this query also appear on this tab.")
             )
           )
         ),
 
         tabPanel(
-          # Tweede verticale tab op algemene informatie pagina
-          # Tab met informatie over wat CBR is
-          title = tags$h4("Wat is Case Based Reasoning?"),
+          title = tags$h4("What is Case Based Reasoning?"),
           fluidRow(
             column(
               width = 8,
               tags$h2(tags$strong("Wat is Case-Based Reasoning?")),
-              tags$p("Case-Based Reasoning is een methode waarbij nieuwe problemen opgelost worden op basis van oplossingen van
-                 soortgelijke problemen uit het verleden. Op basis van de gelijksoortigheid tussen een nieuw 'probleem' en
-                 een oude oplossing kan er een oplossing gevonden worden voor het nieuwe probleem. Het CBR-model in deze 
-                 webapplicatie zoekt een oplossing voor het probleem 'Wat voor type detentie krijgt een veroordeelde?'. 
-                 Er zijn twee mogelijke oplossingen: detention en non-detention. Op basis van oude problemen en bijbehorende
-                 oplossingen (dit zijn dus oude veroordelingen) kan er een oplossing voor het nieuwe probleem aangedragen
-                 worden; oftewel: welk type detentie krijgt een veroordeelde."),
+              tags$p("Case-Based Reasoning is a method in which new problems are solved based on solutions from
+                  similar problems from the past. Based on the similarity between a new 'problem' and
+                  an old solution, a solution can be found for the new problem. The CBR model in this one
+                  web application is looking for a solution to the problem 'What type of detention does a convicted receive?'.
+                  There are two possible solutions: detention and non-detention. Based on old issues and associated
+                  solutions (these are old convictions) can provide a solution for the new problem
+                  turn into; in other words: what type of detention will a convicted person receive."),
               tags$p(""),
-              tags$h4(tags$strong("Welk algoritme gebruikt het CBR model?")),
-              tags$p("Onderliggend het CBR model wordt het K-nearest-neighbours (KNN) algoritme gebruikt.
-                 KNN is een supervised machine learning algoritme en de werking is relatief simpel.
-                 Een supervised algoritme heeft gelabelde data nodig als input, om de output van een label te
-                 voorzien. Het algoritme kan voor classificatie problemen en regressie problemen toegepast worden.
-                 "),
+              tags$h4(tags$strong("Which algorithm does the CBR-model use?")),
+              tags$p("Underlying the CBR model, the K-nearest-neighbors (KNN) algorithm is used.
+                  KNN is a supervised machine learning algorithm and its operation is relatively simple.
+                  A supervised algorithm needs labeled data as input to output a label
+                  to provide. The algorithm can be used for classification problems and regression problems."),
               tags$p(""),
-              tags$h4(tags$strong("Hoe werkt het K-nearest-neigbhours algoritme?")),
-              tags$p("KNN werkt met een database en een nieuwe case. Op basis van een formule wordt de afstand tussen
-            de nieuwe case (ook wel de query genoemd) en de casussen in de database berekend. Dit gebeurt op 
-            basis van de variabelen van de data. Omdat KNN de absolute afstand berekent, wordt de data eerst 
-            genormalizeerd. Nadat de afstand is berekend worden er een zelf gekozen aantal casussen in
-            de database geselecteerd die het dichtste bij de nieuwe case liggen. Dit zelf gekozen aantal
-            is de 'k' in de nearest neighbours algoritme. Vervolgens wordt, in het geval van classificatie,
-            van de geselecteerde casussen in de database gekeken welke klasse ze hebben. Vervolgens
-            wordt er heel simpel 'gestemd': de klasse die de meeste van de geselecteerde casussen hebben
-            wordt toegewezen aan de nieuwe casus."),
+              tags$h4(tags$strong("How does K-nearest neighbours work?")),
+              tags$p("KNN works with a database and a new case. Based on a formula, the distance between
+             calculated the new case (also called the query) and the cases in the database. This happens on
+             based on the variables of the data. Since KNN calculates the absolute distance, the data is first
+             normalized. After the distance has been calculated, a self-selected number of cases are entered
+             selected the database closest to the new case. This self-chosen number
+             is the 'k' in the nearest neighbors algorithm. Then, in the case of classification,
+             of the selected cases in the database looked at which class they have. Thereafter
+             it is simply 'voted': the class that most of the selected cases have
+             is assigned to the new case."),
               tags$p(""),
-              tags$h4(tags$strong("Voordelen van Case-Based Reasoning")),
-              tags$p("Case-Based Reasoning gaat uit van de waarde van oplossingen voor oude problemen. Deze oplossingen kunnen
-                  namelijk ook hergebruikt worden voor nieuwe problemen. Dit maakt CBR anders dan andersoortige classificatie
-                  methoden zoals logistische regressie en random-forest modellen. Deze modellen moeten op voorhand getraind worden,
-                  en genereren niet pas een oplossing als er nieuwe data beschikbaar is. Een CBR-model wordt ook op voorhand getraind,
-                  maar alleen om de ideale k te bepalen. Een CBR-model zoekt, als er nieuwe data beschikbaar is, in de case-base naar soortgelijke casussen. Vervolgens
-                  wordt de 'oplossing' van het meest soortgelijke probleem, of problemen, aangedragen als oplossing voor de nieuwe casus."),
-              tags$h4(tags$strong("Fases van een CBR-systeem")),
-              img(src = "cbr_image.jpg"),
-              tags$p("Een CBR-systeem bestaat uit vier verschillende fases, die op bovenstaande afbeelding 
-                 afgebeeld zijn. De verschillende fases worden hieronder omschreven."),
-              tags$strong("1. Retrieve fase: in het systeem"),
-              tags$p("De cyclus van CBR begint met een nieuw probleem, de 'current problem'. Vervolgens wordt in de Case Base, waarin alle
-                 oude casussen staan gezocht naar gelijke casussen. Dit wordt gedaan met behulp van een algoritme dat 
-                 met een distance measure de afstand tussen de nieuwe en oude case berekent. Vervolgens worden de meest
-                 gelijk casussen opgezocht, en mogelijk weergegeven aan de gebruiker."),
-              tags$strong("2. Reuse fase: in en buiten het systeem"),
-              tags$p("Op basis van de meest gelijke gevallen wordt er een oplossing aangedragen. Dit kan de oplossing van de meest gelijke
-                 casus zijn, maar kan ook een combinatie van verschillende oplossingen zijn. Ook kan een bestaande oplossing
-                 aangepast worden aan een nieuwe situatie. De oplossing wordt vervolgens, buiten het systeem, toegepast op de nieuwe casus."),
-              tags$strong("3. Revise fase: buiten het systeem"),
-              tags$p("Deze stap is niet verplicht, maar nadat de oplossing is toegepast kan na verloop van tijd gezegd worden
-                 in hoeverre de oplossing werkte. In het geval dat de oplossing niet werkte, kan de casus opnieuw door het
-                 CBR systeem behandeld worden, en kan er een revised solution aangedragen worden. Deze kan vervolgens
-                 ook weer toegepast worden op de casus"),
-              tags$strong("4. Retain fase: in het systeem"),
-              tags$p("Als laatste stap in het CBR systeem kan de nieuwe casus, met bijbehorende solution, weer toegevoegd
-                 worden aan de case base als dit waarde oplevert voor het systeem. Als de nieuwe casus wordt toegevoegd
-                 kunnen zaken die in de toekomst een solution zoeken, ook leren van de solution van de nieuwe case,
-                 die dan wel succesvol was of niet. Op deze manier kan een CBR-systeem dus leren van zijn eigen advies.
-                 Het is wel belangrijk om ervoor te zorgen dat het systeem niet zijn eigen bias creëert door het opslaan
-                 van zijn eigen zaken, dus of dit gebeurt verschilt per systeem")
+              tags$h4(tags$strong("Advantages of Case-Based Reasoning")),
+              tags$p("Case-Based Reasoning is based on the value of solutions to old problems. These solutions can
+                   namely also reused for new problems. This makes CBR different from other types of classification
+                   methods such as logistic regression and random forest models. These models must be trained in advance,
+                   and do not only generate a solution when new data is available. A CBR model is also pre-trained,
+                   but only to determine the ideal k. When new data is available, a CBR model searches the case base for similar cases. Thereafter
+                   the 'solution' of the most similar problem, or problems, is presented as the solution for the new case."),
+              tags$h4(tags$strong("Phases of a CBR-system")),
+              img(src = "cbr_cyclus.png"),
+              tags$p("A CBR system consists of four different phases; these are depicted in the image above The different phases are described below."),
+              tags$strong("1. Retrieve phase: inside the system"),
+              tags$p("The cycle of CBR starts with a new problem, the ‘current problem’. Subsequently, the case base, which contains all old cases, is searched for similar cases. This is done using an algorithm that calculates the distance and similarity between the new and old case with a distance measure. Various algorithms can be used for this, but a KNN algorithm is used in the prototype that has been developed. Next, the closest old cases are retrieved and displayed to the user.
+
+"),
+              tags$strong("2. Reuse phase: in and outside the system"),
+              tags$p("Based on the “retrieved case”, a solution for the new case is proposed. This can be done in various ways. The simplest method is to apply the “retrieved case” solution directly to the “new case”. However, it is also possible to choose not to return one old case, but several. In that case, by means of a vote, the solution that most old cases had, it can be determined which solution is applied to the new case. Here too, there are many more options, which depend on the available data and the domain of the CBR prototype. The solution is then applied to the new case outside the system.
+
+"),
+              tags$strong("3. Revise phase: outside the system"),
+              tags$p("This step is optional in a CBR system. After the solution has been applied to the new case, it becomes clear over time whether the solution works. In the event that the solution did not work, the case can go through the CBR cycle again. The CBR system can then provide a revised solution for the failed case. This can then be applied to the case outside the system. Whether this step actually takes place depends on the context of the CBR system.
+
+"),
+              tags$strong("4. Retain phase: inside the system"),
+              tags$p("As a final step in the CBR system, the new case, with accompanying solution, can be added to the case base if this provides value for the system. If the new case is added, cases looking for a solution in the future can also learn from the solution of the new case, which was successful or not. In this way, a CBR system can learn from its own advice. It’s important to make sure the system doesn’t create its own bias by storing its own stuff. The risk of this differs per system.
+
+")
             ),
             column(
               width = 4,
@@ -167,125 +147,71 @@ ui <- fluidPage(
               column(
                 width = 10,
                 style = "border-style: ridge;width:400px;",
-                tags$h4(tags$strong("Wat is het verschil tussen classificatie en regressie?")),
-                tags$p("Bij classificatie moet het model een klasse voorspellen en bij regressie moet het model een
-                   getal voorspellen."),
-                tags$strong("Voorbeelden van een classificatieprobleem:"),
-                tags$li("Het identificeren van spam-mails. Twee labels: spam en niet-spam"),
-                tags$li("Het identificeren van een ziekte. Twee labels: ziek en niet-ziek"),
-                tags$li("Het identificeren van bepaalde groepen klanten. Twee labels: koopt wel en koopt niet na reclame"),
+                tags$h4(tags$strong("What's the difference between classification and regression?")),
+                tags$p("For classification the model must predict a class and for regression the model must predict a
+                    number."),
+                tags$strong("Examples of classification problems:"),
+                tags$li("Identifying spam mails. Two labels: spam and non-spam"),
+                tags$li("Identifying a disease. Two labels: sick and non-sick"),
+                tags$li("Identifying certain groups of customers. Two labels: buy and do not buy after advertising"),
                 tags$p(""),
-                tags$strong("Voorbeelden van een regressieprobleem:"),
-                tags$li("Het voorspellen van de omzet van een bedrijf valuta"),
-                tags$li("Het voorspellen van de ijsverkoop in een bepaald jaar: kwantiteit in valuta"),
-                tags$li("Het voorspellen van de temperatuur in een bepaalde maand: kwantiteit in temperatuur"),
+                tags$strong("Examples of regression problems:"),
+                tags$li("Predicting a company's currency turnover"),
+                tags$li("Predicting ice cream sales in a given year: quantity in currency"),
+                tags$li("Predicting the temperature in a given month: quantity in temperature"),
                 tags$p("")
               ),
             )
           )
         ),
         tabPanel(
-          # Derde verticale tab op algemene informatie pagina
-          # Tab met daarin informatie over de dataset die gebruikt is
-          tags$h4("De 'sentence' dataset"),
+          tags$h4("The 'sentence' dataset"),
           column(
             width = 11,
-            tags$h2(tags$strong("De 'sentence' dataset")),
-            tags$p("Voor dit CBR model is een open dataset gebruik van de Cook County Government.
-                 In deze dataset staan ruim 250.000 veroordelingen van duizenden mensen die in Cook County
-                 zijn veroordeeld voor verschillende type delicten."),
-            tags$a(href = "https://datacatalog.cookcountyil.gov/Courts/Sentencing", "De dataset is te downloaden via deze link"),
+            tags$h2(tags$strong("The 'sentence' dataset")),
+            tags$p("For this CBR model an open dataset has been used by the Cook County Government. This dataset contains more than 250,000 convictions of thousands of people convicted in Cook County for various types of crimes. "),
+            tags$a(href = "https://datacatalog.cookcountyil.gov/Courts/Sentencing", "The dataset can be downloaded via this link"),
             tags$h4(tags$strong("Aanpassingen aan data")),
-            tags$p("Om de data te kunnen gebruiken voor dit CBR-systeem zijn er verschillende aanpassingen gedaan. 
-                 De aanpassingen zijn toegepast in de functies read_and_clean, te vinden in het functions.R bestand,
-                 maar de meest belangrijke aanpassingen worden hieronder vermeld:"),
-            tags$li("De originele kolom SENTENCE_TYPE bevatte verschillende soorten detentie. Deze zijn aangepast, zoals vermeld in
-                  de uitleg van de data op de website van Cook County, naar twee categorieën: detention en non-detention"),
-            tags$li("De database bevatte veel dubbele observaties, zowel dubbele charge_id als person_ids. Daarom
-                  zijn deze observaties verwijderd uit de dataset."),
-            tags$li("Er zijn verschillende variabelen uit de dataset verwijderd. Uiteindelijk worden er acht
-                  voorspellende variabelen meegenomen in het model, en zijn er drie variabelen die meer info
-                  geven over de zaak. Deze variabelen worden weergegeven bij het tab 'gebruikte CBR-model'."),
-            tags$li("Er is een steekproef van 1/5 van de gehele database genomen, omdat een groot aantal observaties
-                  het CBR-model langzamer kan maken. Er is voor gezorgd dat alle groepen evenredig vertegenwoordigd
-                  zijn in het model."),
-            tags$li("Deze steekproef is vervolgens opgesplitst in een testset en in een train set. De trainset wordt gebruikt
-                  als case-base, en de testset is alleen gebruikt om de werking van het model te testen."),
-            tags$h4(tags$strong("Impressie van de sentence dataset")),
-            tags$p("Hieronder zie je de eerste tien observaties van de trainset. De totale trainset bestaat
-                 uit 2791 observaties van 12 verschillende variabelen."),
+            tags$p("Various adjustments have been made to be able to use the data for this CBR system.
+                  The modifications have been applied to the functions read_and_clean, found in the functions.R file, but the most important modifications are listed below:"),
+            tags$li("The original SENTENCE_TYPE column contained different types of detention. These have been adjusted as stated in
+                   the explanation of the data on the Cook County website, by two categories: detention and non-detention"),
+            tags$li("The database contained many duplicate observations, both duplicate charge_id and person_ids. Therefore
+                   these observations have been removed from the dataset."),
+            tags$li("Several variables have been removed from the dataset. In the end there will be eight
+                   predictive variables included in the model, and there are three variables that provide more info
+                   give about the case. These variables are shown in the tab 'used CBR model'."),
+            tags$li("A sample of 1/100 of the entire database has been taken because of a large number of observations
+                   slow down the CBR model. It has been ensured that all groups are equally represented
+                   are in the model."),
+            tags$li("This sample was then divided into a test set and a train set. The trainset is used
+                   as a case base, and the test set was used only to test the model's operation."),
+            tags$h4(tags$strong("Impression of the sentence dataset")),
+            tags$p("Below you can see the first ten observations of the trainset. The total trainset exists
+                  of 2791 observations of 12 different variables."),
             DT::dataTableOutput("head_trainset")
           )
         ),
         tabPanel(
-          # Vierde verticale tab op algemene informatie pagina
-          # Tab met informatie over het ontwikkelde CBR-model
-          tags$h4("Het ontwikkelde CBR-model"),
+          tags$h4("The developed CBR-model"),
           column(
             width = 11,
-            tags$h2(tags$strong("Het ontwikkelde CBR-model")),
-            tags$p("Het model is gebouwd in R, en er is geen geüpdatet Case-Based Reasoning package
-            beschikbaar in deze programmeertaal. Daarom heb ik zelf, op basis van een bestaande KNN-package,
-            code geschreven voor een CBR-model. Hieronder leg ik kort uit hoe ik het FNN-package heb gebruikt
-            om een CBR-model te kunnen bouwen. Daarna ga ik kort in op hoe de meest ideale k voor de sentence
-            data is gevonden met behulp van een test en train set."),
-            tags$h4(tags$strong("Project workflow op basis van targets")),
-            tags$p("Dit project heb ik met behulp van het targets package gemaakt. Dit is een package
-                   waarmee je makkelijk een duidelijke project-workflow kan maken. Dit houdt in dat je je 
-                   code in functies schrijft, waardoor het voor anderen duidelijk is wat er in je code gebeurt.
-                   Daarnaast heeft het package als voordeel dat het erg tijdbesparend is: als je maar één stap
-                   van je workflow hebt veranderd wordt alleen de aangepaste stap uitgevoerd."),
-            tags$p("De targets package wordt ook gebruikt om een duidelijke workflow van je code te genereren,
-                   de workflow van mijn project is hieronder te vinden. Klik op de stappen van het proces
-                   om een korte omschrijving van de stap te lezen. Het uiteindelijke CBR-model is te vinden
-                   onder 'results_cbr' en de gegenereerde query is de stap 'random_query'"),
+            tags$h2(tags$strong("The developed CBR-model")),
+            tags$p("The model is built in R, and no updated Case-Based Reasoning package is available in this programming language. That is why I wrote code for a CBR model myself, based on an existing KNN package. Below I briefly explain how I used the FNN package to build a CBR model. Then I will briefly discuss how the most ideal k for the sentence data was found using a test and train set."),
+            tags$h4(tags$strong("Project workflow based on targets")),
+            tags$p("I made this project using the targets package. This is a package with which you can easily create a clear project workflow. This means that you write your code in functions, so that it is clear to others what is happening in your code. In addition, the package has the advantage that it is very time-saving: if you have only changed one step of your workflow, only the modified step will be executed."),
+            tags$p("The targets package is also used to generate a clear workflow of your code, the workflow of my project can be found below. Click on the steps of the process to read a brief description of the step. The final CBR model can be found under 'results_cbr' and the generated query is the step 'random_query'"),
             includeHTML("www/workflow.html"),
-            tags$h4(tags$strong("Van een KNN-package naar CBR-Model")),
-            tags$p("In R zijn vele KNN-packages beschikbaar, echter geen CBR-package. Daarom heb ik het package
-                   FNN (Fast Nearest Neighbours) gebruikt om een CBR-model te bouwen. Het FNN package heeft
-                   verschillende opties voor KNN, en genereert naast de voorspelde klasse/waarde ook een
-                   distance matrix en een indextabel, met daarin de nearest-neighbours. Ik heb deze twee
-                   tabellen gebruikt om het CBR-systeem te bouwen."),
-            tags$p("Een distance matrix is een tabel met daarin de afstand tussen de nieuwe case en de casussen
-                   in de database. Bij KNN worden de k-nearest neighbours van de nieuwe case geselecteerd: dit
-                   zijn dus de casussen met de laagste afstand. Voor een CBR-model wil je geen afstand genereren,
-                   maar een similarity percentage. In de code zit een stuk verwerkt die de maximale distance
-                   o.b.v. een dataset kan genereren. Deze berekent de afstand tussen twee casussen: een van de 
-                   casussen heeft allemaal nullen als waarneming, en een andere casus heeft allemaal enen als waarneming.
-                   Het resultaat hiervan is de maximale afstand tussen twee punten in een dataset. Om vervolgens het similarity
-                   percentage tussen de query en de oude casussen te berekenen wordt de volgende formule gebruikt:"),
-            tags$code("similarity = 1 - (afstand tussen twee punten / maximiale afstand)"),
+            tags$h4(tags$strong("From a KNN package to a CBR Model")),
+            tags$p("Many KNN packages are available in R, but no CBR package. That's why I used the FNN (Fast Nearest Neighbors) package to build a CBR model. The FNN package has several options for KNN, and in addition to the predicted class / value also generates a distance matrix and an index table, containing the nearest neighbors. I have used these two tables to build the CBR system."),
             tags$p(""),
-            tags$p("Vervolgens heb ik de indextabel gebruikt om een tabel te genereren met de k-nearest neighbours.
-                   Het model weergeeft simpelweg de k-nearest neighbours op basis van het similarity percentage.
-                   De klasse van de query-case wordt op basis van het stemprincipe gegenereert: de voorspelde klasse
-                   is de klasse die de meeste van de nearest-neighbours hebben. Hierbij wordt echter wel de 
-                   probability van het stemmen getoond. Dit is het percentage van de nearest neighbours die ook deze
-                   klasse heeft."),
+            tags$code("similarity = 1 - (afstand tussen twee punten / maximiale afstand)"),
+            tags$p("A distance matrix is a table containing the distance between the new case and the cases in the database. At KNN, the k-nearest neighbors of the new case are selected: these are the cases with the lowest distance. For a CBR model you do not want to generate a distance, but a similarity percentage. The code contains a piece that contains the maximum distance based on can generate a dataset. This calculates the distance between two cases: one of the cases has all zeros as an observation, and another case has all ones as an observation. The result of this is the maximum distance between two points in a data set. The following formula is used to calculate the similarity percentage between the query and the old cases:"),
+            tags$p("Then I used the index table to generate a table with the k-nearest neighbors. The model simply displays the k-nearest neighbors based on the similarity percentage. The query case class is generated based on the voting principle: the predicted class is the class that has the most of the nearest neighbors. However, the probability of voting is shown here. This is the percentage of the nearest neighbors that also has this class."),
             tags$h4(tags$strong("KNN-methode en ideale K bepalen op basis van test- en train set")),
-            tags$p("Het KNN-algoritme van het FNN-package heeft twee belangrijke instellingen: het aantal nearest neighbours
-                   dat geselecteerd wordt en de methode van de KNN: 'kd-tree', 'cover_tree', of 'brute'. Daarnaast
-                   kunnen er verschillende voorspellende variabelen gebruikt worden: alle voorspellende
-                   variabelen of alleen voorspellende variabelen die een bepaald significantieniveau hebben. Deze
-                   significantie kan berekend worden met behulp van logistische regressie."),
-            tags$p("De ideale K, methode van KNN en welke voorspellende variabelen meegenomen moeten worden kan
-                 berekend worden door voor elk van deze mogelijkheden (de drie methodes met de twee soorten
-                 voorspellende variabelen) het KNN-algoritme te runnen op een test set. De data wordt hierbij 
-                 opgesplitst in een trainset van 70% en een testset van 30%. Vervolgens wordt het KNN-algoritme
-                 toegepast op de testset, met een k van 1 tot en met 300. Zo wordt voor elke case in de testset
-                 de klasse voorspeld. Vervolgens kan deze voorspelde klasse vergeleken worden met de echte klasse.
-                 Dit resulteert in een 'accuracy level'. Dit is het percentage klasse van de testset dat
-                 het model goed voorspeld heeft."),
-            tags$p("De onderstaande grafiek toont voor elke van de combinaties, tot en met k=300, de accuracy 
-                 van het model. Zoals te zien is presteert het model beter wanneer alle predictors worden
-                 meegenomen en dit is ook verwerkt in het model. De hoogste accuracy, 64.9%, genereert het model met een
-                 k-value van 15 en met methode de brute. Dit zijn dan ook de standaard instellingen
-                 voor het CBR model. De accuracy is niet heel erg hoog, maar dat komt ook doordat dit model
-                 is gebouwd om de waarde van de CBR-methode te illustreren met een test database en niet een zo
-                 hoog mogelijke accuracy te genereren. Wel moet opgemerkt worden dat het percentage veroordelingen
-                 in de database met een 'sentence' slechts 45.1% is. Dit betekent dat het model beter in staat 
-                 is om de veroordelingen te voorspellen dan als alle voorspellingen gelabeled 
-                 worden met 'detention'. In dat geval zal de accuracy maar 45.1% zijn.")
+            tags$p("The KNN algorithm of the FNN package has two important settings: the number of nearest neighbors that are selected and the method of the KNN: 'kd-tree', 'cover_tree', or 'brute'. In addition, several predictive variables can be used: all predictor variables or only predictor variables that have a certain significance level. This significance can be calculated using logistic regression."),
+            tags$p("The ideal K, method of KNN and which predictor variables should be included can be calculated by running the KNN algorithm on a test set for each of these possibilities (the three methods with the two types of predictor variables). The data is split into a train set of 70% and a test set of 30%. The KNN algorithm is then applied to the test set, with k from 1 to 300. Thus, the class is predicted for each case in the test set. Subsequently, this predicted class can be compared with the real class. This results in an 'accuracy level'. This is the percentage of class of the test set that the model predicted correctly."),
+            tags$p("The graph below shows the accuracy of the model for each of the combinations, up to and including k = 300. As can be seen, the model performs better when all predictors are included and this is also incorporated in the model. The model generates the highest accuracy, 64.9%, with a k-value of 15 and the brute method with the method. These are the default settings for the CBR model. The accuracy is not very high, but that is also because this model was built to illustrate the value of the CBR method with a test database and not to generate the highest possible accuracy. It should be noted, however, that the percentage of convictions in the database with a 'sentence' is only 54.9%. This means that the model is better able to predict convictions than if all predictions are labeled 'detention'. In that case the accuracy will only be 54.9%.")
           ),
           column(
             width = 10,
@@ -299,30 +225,20 @@ ui <- fluidPage(
       )
     ),
     tabPanel(
-      # Tweede horizontale tab met het CBR model
       title = tags$h4(tags$strong("CBR Model")),
       navlistPanel(
         tabPanel(
-          # Eerste verticale tab op CBR model horizontale tab
-          # Tab om een query te genereren die door het CBR model gerund wordt
-          title = tags$h4("Genereer query"),
+          title = tags$h4("Generate query"),
           fluidPage(
             column(
               width = 12,
               style = "text-align: center",
-              tags$h2(tags$strong("Genereer query"))
+              tags$h2(tags$strong("Generate query"))
             ),
             column(
               width = 10,
               offset = 1,
-              tags$p("Kies hier een methode om een nieuwe query voor het CBR-model te genereren.
-                   Er zijn drie opties: upload een .csv bestand in het juiste format, genereer een
-                   random query, of voer handmatig een nieuwe query in. Onder elke methode staat een aparte
-                     submit knop: upload query voor de eerste methode, genereer random query voor de tweede
-                     methode, en submit query voor de derde methode. De gegenereerde query verschijnt
-                     enkele seconden nadat je op de knop hebt gedrukt onder aan de pagina.
-                     Wanneer je tevreden bent met de query klik je op 'accept' query. De query wordt nu 
-                     gerund. De output van het model kun je vinden onder het tabje 'resultaten CBR-model'")
+              tags$p("Choose a method here to generate a new query for the CBR model. There are three options: upload a .csv file in the correct format, generate a random query, or enter a new query manually. Below each method is a separate submit button: upload query for the first method, generate random query for the second method, and submit query for the third method. The generated query will appear a few seconds after you press the button at the bottom of the page. When you are satisfied with the query, click on 'accept' query. The query is now being run. The output of the model can be found under the tab 'CBR model results'.")
             ),
             column(
               width = 1
@@ -336,7 +252,7 @@ ui <- fluidPage(
               style = ("text-align: center;height: 950px"),
               tags$h3(tags$strong("1. Upload bestand")),
               fileInput("csv_cbr",
-                label = "Upload .csv bestand"
+                label = "Upload a .csv file"
               ),
               actionButton(
                 inputId = "upload_file",
@@ -347,13 +263,13 @@ ui <- fluidPage(
               width = 3,
               offset = 0.5,
               style = ("text-align: center;height: 950px"),
-              tags$h3(tags$strong("2. Genereer random query")),
+              tags$h3(tags$strong("2. Generate random query")),
               column(
                 width = 12,
                 div(style = "height:72px;"),
                 actionButton(
                   inputId = "random_query",
-                  label = "Genereer random query"
+                  label = "Generate random query"
                 ),
                 tags$p(""),
                 tags$strong(textOutput("random_query_submit"))
@@ -361,15 +277,14 @@ ui <- fluidPage(
             ),
             column(
               width = 6,
-              tags$h3(tags$strong("3. Handmatige invoer query")),
+              tags$h3(tags$strong("3. Manual query inputquery")),
               style = ("text-align: center;height: 950px"),
               column(
                 width = 6,
                 style = "text-align: center",
                 inputPanel(
-                  tags$strong("Niet-voorspellende variabelen"),
-                  helpText("Dit zijn variabelen die niet door het model meegenomen worden als voorspellende variabelen,
-                      maar puur als additionele informatie weer worden gegeven."),
+                  tags$strong("Non-predictive variables"),
+                  helpText("These are variables that are not included by the model as predictive variables, but are presented purely as additional information."),
                   numericInput(
                     inputId = "een",
                     label = "case_id",
@@ -388,9 +303,8 @@ ui <- fluidPage(
                 width = 6,
                 style = "text-align: center",
                 inputPanel(
-                  tags$strong("Voorspellende variabelen"),
-                  helpText("Dit zijn voorspellende variabelen die door het model gebruikt worden om de class van de query
-                   case te voorspellen."),
+                  tags$strong("Predicting variables"),
+                  helpText("These are predictive variables used by the model to predict the query case class."),
                   numericInput(
                     inputId = "twee",
                     label = "charge count",
@@ -466,10 +380,7 @@ ui <- fluidPage(
               width = 10,
               style = "text-align: left",
               offset = 1,
-              tags$p("Het KNN-algoritme, welke onder het CBR-model draait, heeft twee additionele instellingen: 
-              het aantal nearest neighbours dat geselecteerd wordt (K) en de methode waarop deze gevonden
-                worden. De instellingen die de hoogste accuracy opleveren zijn geselecteerd, maar deze
-                     instellingen kunnen hier aangepast worden.")
+              tags$p("The KNN algorithm, which runs under the CBR model, has two additional settings: the number of nearest neighbors that are selected (K) and the method by which they are found. The settings that provide the highest accuracy are selected, but these settings can be adjusted here.")
             ),
             column(
               width = 1
@@ -479,7 +390,7 @@ ui <- fluidPage(
               style = "text-align: center",
               inputPanel(
                 numericInput("k",
-                  label = "Aantal voor K",
+                  label = "Number for K",
                   value = 15
                 ),
                 selectInput("cbr_method",
@@ -577,7 +488,7 @@ ui <- fluidPage(
 #------------------------------------------#
 # server = code om content in de UI te genereren
 server <- function(input, output) {
-  # reactive values voor de knoppen 'random_query' en 'manual_query'
+  
   reactive <- reactiveValues(value = "leeg")
   observe({
     input$random_query
@@ -592,7 +503,6 @@ server <- function(input, output) {
     reactive$value <- "upload_file"
   })
 
-  # output train set op 'de sentence database' tab
   output$head_trainset <- DT::renderDataTable(
     {
       database %>%
@@ -601,25 +511,23 @@ server <- function(input, output) {
     options = list(scrollX = TRUE)
   )
 
-  # submit messages voor knoppen op 'genereer query' tab
-  output$accept_query_message <- renderText({
+    output$accept_query_message <- renderText({
     if (input$run_cbr_model > 0) {
       return("")
     } else if (input$accept_query > 0) {
-      return("De query is geaccepteerd")
+      return("The query is accepted")
     } else {
       return("")
     }
   })
 
-  # submit messages voor genereren van query
   output$submit_message <- renderText({
     if (input$run_cbr_model > 0) {
       return("")
     } else if (input$submit == 1) {
-      return("De ingevoerde query is gegenereerd")
+      return("The query is generated")
     } else if (input$submit > 1) {
-      return("De nieuw ingevoerde query is gegenereerd")
+      return("The new query is generated")
     }
     else {
       return("")
@@ -630,28 +538,26 @@ server <- function(input, output) {
     if (input$run_cbr_model > 0) {
       return("")
     } else if (input$random_query == 1) {
-      return("De random query is gegenereerd")
+      return("The random query is generated")
     } else if (input$random_query > 1) {
-      return("De nieuwe random query is gegenereerd")
+      return("The new random query is generated")
     }
     else {
       return("")
     }
   })
 
-  # renderen van UI voor het accepteren van de query
-  # op de eerste horizontale tab van de pagina cbr-model
   output$gegenereerde_query <- renderUI({
     if (reactive$value == "random_query") {
       display_random_query()
       taglist <- list(fluidPage(
         column(
           width = 12,
-          tags$h2(tags$strong("De gegenereerde query")),
+          tags$h2(tags$strong("The generated query")),
           DT::DTOutput("query_display", width = "100%"),
           DT::DTOutput("random_query_display"),
           hr(style = "border-top: 1px solid #606060;"),
-          tags$h2(tags$strong("Accepteren van query")),
+          tags$h2(tags$strong("Accepting of query")),
           style = "text-align: center",
           column(
             width = 12,
@@ -661,8 +567,7 @@ server <- function(input, output) {
         column(
           width = 8,
           style = "text-align: left",
-          tags$p("Klik op 'accept query' om de query te accepteren. Ga vervolgens naar de tab
-                       'run CBR-model', waar je de query kunt runnen.")
+          tags$p("Click on 'accept query' to accept the query. Then go to the tab 'run CBR model', where you can run the query.")
         ),
         column(
           width = 4,
@@ -680,11 +585,11 @@ server <- function(input, output) {
       list(fluidPage(
         column(
           width = 12,
-          tags$h2(tags$strong("De gegenereerde query")),
+          tags$h2(tags$strong("The generated query")),
           DT::DTOutput("query_display", width = "100%"),
           DT::DTOutput("random_query_display"),
           hr(style = "border-top: 1px solid #606060;"),
-          tags$h2(tags$strong("Accepteren van query")),
+          tags$h2(tags$strong("Accepting of query")),
           style = "text-align: center",
           column(
             width = 12,
@@ -694,8 +599,7 @@ server <- function(input, output) {
         column(
           width = 8,
           style = "text-align: left",
-          tags$p("Klik op 'accept query' om de query te accepteren. Ga vervolgens naar de tab
-                       'run CBR-model', waar je de query kunt runnen.")
+          tags$p("Click on 'accept query' to accept the query. Then go to the tab 'run CBR model', where you can run the query.")
         ),
         column(
           width = 4,
@@ -713,11 +617,11 @@ server <- function(input, output) {
       list(fluidPage(
         column(
           width = 12,
-          tags$h2(tags$strong("De gegenereerde query")),
+          tags$h2(tags$strong("The generated query")),
           DT::DTOutput("query_display", width = "100%"),
           DT::DTOutput("random_query_display"),
           hr(style = "border-top: 1px solid #606060;"),
-          tags$h2(tags$strong("Accepteren van query")),
+          tags$h2(tags$strong("Accepting of query")),
           style = "text-align: center",
           column(
             width = 12,
@@ -727,8 +631,7 @@ server <- function(input, output) {
         column(
           width = 8,
           style = "text-align: left",
-          tags$p("Klik op 'accept query' om de query te accepteren. Ga vervolgens naar de tab
-                       'run CBR-model', waar je de query kunt runnen.")
+          tags$p("Click on 'accept query' to accept the query. Then go to the tab 'run CBR model', where you can run the query.")
         ),
         column(
           width = 4,
@@ -743,8 +646,6 @@ server <- function(input, output) {
     }
   })
 
-  ## Queries genereren ##
-  # event reactive voor de twee soorten queries #
   display_query <- eventReactive(input$submit, {
     query <- c(
       input$een, input$twee, input$drie, input$vier, input$vijf, input$zes, input$zeven, input$acht,
@@ -801,7 +702,6 @@ server <- function(input, output) {
     return(query_data)
   })
 
-  # weergeven van de gegenereerde random queries
   output$random_query_display <- DT::renderDataTable(
     {
       if (reactive$value == "random_query") {
@@ -826,8 +726,6 @@ server <- function(input, output) {
     options = list(scrollX = TRUE)
   )
 
-  ## Runnen en resultaten van CBR-model ##
-  # Event reactive voor het runnen van het cbr_model
   run_cbr_model <- eventReactive(input$run_cbr_model, {
     if (reactive$value == "random_query") {
       random_query_data <- display_random_query()
@@ -864,10 +762,9 @@ server <- function(input, output) {
     }
   })
 
-  # voorspelde solution en % nearest neighbours
   output$voorspelde_klasse_text <- renderText({
     run_cbr_model()
-    return("De voorspelde klasse, proposed solution, van de query-case is:")
+    return("The predicted class, the proposed solution, of the query case is:")
   })
   output$voorspelde_klasse_query <- renderText({
     results <- run_cbr_model()
@@ -875,7 +772,7 @@ server <- function(input, output) {
   })
   output$percentage_neighbours_text <- renderText({
     run_cbr_model()
-    return("Dit is door het volgende percentage van de nearest neighbours aangedragen:")
+    return("This is suggested by the following percentage of the nearest neighbors:")
   })
   output$percentage_neighbours <- renderText({
     results <- run_cbr_model()
@@ -884,21 +781,19 @@ server <- function(input, output) {
     return(text)
   })
 
-  # Extra text en lay-out voor resultaten CBR model
   output$resultaten_cbr_model <- renderText({
     run_cbr_model()
     return("Resultaten CBR model")
   })
   output$nearest_neighbours_query <- renderText({
     run_cbr_model()
-    return("Nearest neighbours van de query case:")
+    return("Nearest neighbours of the query case:")
   })
   output$streep <- renderUI({
     run_cbr_model()
     hr(style = "border-top: 1px solid #606060;")
   })
 
-  # datatable met nearest neighbours van query case
   output$query_cbr_results <- DT::renderDataTable(
     {
       results <- run_cbr_model()
@@ -913,8 +808,6 @@ server <- function(input, output) {
     )
   )
 
-  ## Query en solution toevoegen aan de case base ##
-  # Event reactive voor de knop
   add_query_to_casebase <- eventReactive(input$toevoegen_casebase, {
     if (reactive$value == "random_query") {
       add_row <- display_random_query()
@@ -948,14 +841,12 @@ server <- function(input, output) {
     }
   })
 
-  # Rendereen van UI om query toe te voegen
-  # aan de case-base
   output$accepting_query <- renderUI({
     run_cbr_model()
     tagList(column(
       width = 12,
       hr(style = "border-top: 1px solid #606060;"),
-      tags$h2(tags$strong("Toevoegen aan case-base?")),
+      tags$h2(tags$strong("Adding to the case base?")),
       style = "text-align: center",
       column(
         width = 12,
@@ -964,12 +855,12 @@ server <- function(input, output) {
       column(
         width = 8,
         style = "text-align: left",
-        tags$p("Voeg de query met de proposed solution toe aan de case-base?")
+        tags$p("Add the query containing the proposed solution to the case base?")
       ),
       column(
         width = 4,
         actionButton("toevoegen_casebase",
-          label = "voeg toe aan case base"
+          label = "Add to the case base"
         ),
         tags$p("")
       )
@@ -985,8 +876,8 @@ server <- function(input, output) {
       style = "text-align: center",
       p(""),
       hr(style = "border-top: 1px solid #606060;"),
-      tags$h2(tags$strong("Nieuwe case-base")),
-      p("Dit is de nieuwe case-base met de gerunde query case")
+      tags$h2(tags$strong("New case base")),
+      p("This is the new case-base with the runned query case")
     ))
   })
 
