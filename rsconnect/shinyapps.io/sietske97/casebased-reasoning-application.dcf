@@ -1,0 +1,13 @@
+name: casebased-reasoning-application
+title: casebased-reasoning-application
+username:
+account: sietske97
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3992601
+bundleId: 4490706
+url: https://sietske97.shinyapps.io/casebased-reasoning-application/
+when: 1618839473.21358
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: blog nederlands.Rmd

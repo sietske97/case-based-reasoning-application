@@ -9,7 +9,6 @@ source("R/03_defining_values.R")
 ## interface van de app ##
 ui <- fluidPage(
   theme = shinytheme("cosmo"),
-  includeCSS("www/mycss.css"),
   column(
     width = 12,
     div(style = "height:50px")
@@ -61,10 +60,7 @@ ui <- fluidPage(
               width = 6,
               tags$h4(tags$strong("Wat is het doel van deze applicatie?")),
               tags$p("Het doel van deze applicatie is om de werking - en bijbehorende waarde -
-                  van een Case-Based Reasoning (CBR) systeem te tonen. Dit project heb ik als data-trainee
-                  uitgevoerd bij het Innovatielab van het CJIB. In eerste instantie zou ik een CBR-systeem
-                  gebouwd worden met data van het CJIB zelf, maar deze data bleek niet toereikend. Daarom
-                  heb ik gekozen om een CBR-model te bouwen met testdata."),
+                  van een Case-Based Reasoning (CBR) systeem te tonen."),
               tags$h4(tags$strong("Wat voorspelt het model?")),
               tags$p("Het model voorspelt (classificeert) voor nieuwe zaken het type veroordeling 
                  dat de verdachte van de nieuwe zaak waarschijnlijk krijgt: detention of non-detention. 
@@ -197,9 +193,7 @@ ui <- fluidPage(
             tags$h2(tags$strong("De 'sentence' dataset")),
             tags$p("Voor dit CBR model is een open dataset gebruik van de Cook County Government.
                  In deze dataset staan ruim 250.000 veroordelingen van duizenden mensen die in Cook County
-                 zijn veroordeeld voor verschillende type delicten. Voor deze dataset is gekozen omdat
-                 het verwant is aan het uitvoeringsgebied van het CJIB, en de dataset bevat veel verschillende
-                 variabelen."),
+                 zijn veroordeeld voor verschillende type delicten."),
             tags$a(href = "https://datacatalog.cookcountyil.gov/Courts/Sentencing", "De dataset is te downloaden via deze link"),
             tags$h4(tags$strong("Aanpassingen aan data")),
             tags$p("Om de data te kunnen gebruiken voor dit CBR-systeem zijn er verschillende aanpassingen gedaan. 

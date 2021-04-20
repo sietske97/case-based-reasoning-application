@@ -49,7 +49,7 @@ cbr_model <- function(database,
       as.character(query_data[[col]])
     }
     else {
-      (query_data[[col]] - min(query_data[[col]])) / (max(data_full[[col]]) - min(data_full[[col]]))
+      (query_data[[col]] - min(data_full[[col]])) / (max(data_full[[col]]) - min(data_full[[col]]))
     }
   })
   

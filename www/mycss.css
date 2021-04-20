@@ -1,8 +1,0 @@
-/* Extra opmaak voor de app: positioneert het logo van het CJIB en het innovatielab*/
-body {
-  margin-top: 90px;
-  background-image: url("cjib_logo.jpg"), url("lab_logo.png");
-  background-repeat: no-repeat;
-  background-position: top center, top right 30px;
-  background-size: auto, 150px;
-}
