@@ -4,9 +4,9 @@
 ## read_and_clean_data 
 # Deze functie leest het data.csv bestand en schoont deze data op,
 # onder meer factors van variabelen rechttrekken
-read_training_data <- function(){
+read_training_data <- function(path){
   # inlezen van data
-  data <- read_csv("dutch/data/data.csv")
+  data <- read_csv(path)
   
   # omzetten naar factor van character 
   to_factor <- c("charge_disposition", "sentence_court_name", "gender", "offense_category", "sentence", "convicted_chicago")

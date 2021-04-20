@@ -8,7 +8,7 @@ knitr::opts_knit$set(root.dir = '../')
 knitr::opts_chunk$set(echo = TRUE)
 source("english/R/01_libraries.R")
 source("english/R/02_functions.R")
-data <- read_training_data()
+data <- read_training_data(path = "english/data/data.csv")
 
 query_data <- data %>%
   slice(1)
@@ -27,6 +27,7 @@ In this blog I will briefly explain how you can build a case-based reasoning (cb
 **Resources voor de blog**
 
 * Shinyapp: I have developed a shiny-app which displays the output of the CBR-model. This shiny app can be found on the following webpage:  https://sietske97.shinyapps.io/casebased-reasoning-application-english
+
 * Repository with code: The R-code can be found in the following repository: https://github.com/sietske97/casebased-reasoning-application
 
 # What is case-based reasoning?

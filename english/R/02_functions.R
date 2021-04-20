@@ -4,9 +4,9 @@
 ## read_and_clean_data
 # This function reads the data.csv file and cleans this data,
 # Straighten factors of variables, among other things
-read_training_data <- function(){
+read_training_data <- function(path){
   # reading of data
-  data <- read_csv("english/data/data.csv")
+  data <- read_csv(path)
   
   # Change factor to character
   to_factor <- c("charge_disposition", "sentence_court_name", "gender", "offense_category", "sentence", "convicted_chicago")

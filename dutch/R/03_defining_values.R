@@ -1,6 +1,6 @@
 #------------------------------------------#
 ## Overige code voor app ##
-database <- read_training_data()
+database <- read_training_data(path = "data/data.csv")
 
 min_value <- NULL
 max_value <- NULL

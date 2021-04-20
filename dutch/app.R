@@ -283,9 +283,9 @@ ui <- fluidPage(
                  voor het CBR model. De accuracy is niet heel erg hoog, maar dat komt ook doordat dit model
                  is gebouwd om de waarde van de CBR-methode te illustreren met een test database en niet een zo
                  hoog mogelijke accuracy te genereren. Wel moet opgemerkt worden dat het percentage veroordelingen
-                 in de database met een 'sentence' slechts 45.1% is. Dit betekent dat het model beter in staat 
+                 in de database met een 'sentence' slechts 54.9% is. Dit betekent dat het model beter in staat 
                  is om de veroordelingen te voorspellen dan als alle voorspellingen gelabeled 
-                 worden met 'detention'. In dat geval zal de accuracy maar 45.1% zijn.")
+                 worden met 'detention'. In dat geval zal de accuracy maar 54.9% zijn.")
           ),
           column(
             width = 10,

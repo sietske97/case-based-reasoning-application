@@ -8,7 +8,7 @@ knitr::opts_knit$set(root.dir = '../')
 knitr::opts_chunk$set(echo = TRUE)
 source("dutch/R/01_libraries.R")
 source("dutch/R/02_functions.R")
-data <- read_training_data()
+data <- read_training_data(path = "dutch/data/data.csv")
 
 query_data <- data %>%
   slice(1)
