@@ -3,12 +3,12 @@ This repository contains a case-based reasoning model Shiny App, with a UI-inter
 
 # How to run the app
 ## Run the app in your browser
-A version of this app is also hosted via shinyapps.io and can be viewed at the following URL: https://sietske97.shinyapps.io/case-based-reasoning-application/
+A version of this app is also hosted via shinyapps.io and can be viewed at the following URL: https://sietske97.shinyapps.io/casebased-reasoning-application/
 
 # How to run the app locally
 Run the app from Rstudio, without cloning this repository, by running the following code:
 ```[run app local, echo = TRUE]
-runGitHub("case-based-reasoning-application", "sietske97")
+runGitHub("casebased-reasoning-application", "sietske97")
 ```
 
 # Contents of the folders
@@ -35,3 +35,6 @@ Data used for uploading the application to the shinyapps.io server
 
 ## www
 The www folder contains additional data that the app needs, such as images, html files and a CSS format file. The .jpg and .png files are images that are loaded into the app. The workflow.html file shows the workflow of the targets, and the mycss.css contains additional formatting for the placement of the lab logo.
+
+## Blog
+This map contains the markdown for the blog that I wrote on how to make a CBR-system in R. 
