@@ -1,40 +1,38 @@
 # Case Based Reasoning Application
-This repository contains a case-based reasoning model Shiny App, with a UI-interface. The model predicts the sentence-type (detention or non-detention) of a new lawsuit case. The model uses open data from the Cook County Government (https://datacatalog.cookcountyil.gov/Courts/Sentencing). 
+Deze repository bevat een  case-based reasoning model SHiny APP, met een user interface. Het model voorspelt de sentence-type (detention of non-detention) van een nieuwe veroordeling. Het model gebruikt dat avan de [Cook County Government](https://datacatalog.cookcountyil.gov/Courts/Sentencing). 
 
-# How to run the app
-## Run the app in your browser
-A version of this app is also hosted via shinyapps.io and can be viewed at the following URL: https://sietske97.shinyapps.io/casebased-reasoning-application/
+# Hoe kan de app gerund worden?
+## Run de app in je browser
+Een versie van deze app is gehost via shinyapps.io en kan bekeken worden via de volgende URL: https://sietske97.shinyapps.io/casebased-reasoning-application/
 
-# How to run the app locally
-Run the app from Rstudio, without cloning this repository, by running the following code:
-```[run app local, echo = TRUE]
+# Run de app lokaal vanuit R
+Om de app vanuit Rstudio te runnen, zonder dat je deze repository hoeft te clonen, run je de volgende code:
+
+```{run app local, echo = TRUE}
 runGitHub("casebased-reasoning-application", "sietske97")
 ```
 
-# Contents of the folders
+# Inhoud van de mappen
 ## app.R
-This file contains the code of the application. First, the three scripts are sourced in the R folder. The user interface is then defined under the ui section. The 'server' part contains the responsive code to generate the user interface.
+Dit bestand bevat de code van de applicatie. De drie scripts zijn afkomstig uit de R-map. De gebruikersinterface wordt dan gedefinieerd onder de ui-sectie. Het 'server'-gedeelte bevat de responsieve code om de gebruikersinterface te genereren.
 
 ## data
-The data folder contains two files:
+De datafolder bevat twee documenten:
 
-**data.csv**is the dataset used to run the cbr model. It is the database in which similar cases are searched.
+**data.csv**is de dataset die gebruikt wordt om het CBR-model te runnen. Het is de database waarin het systeem opzoek gaat naar vergelijkbare casussen. 
 
-**query.csv**is an example file that a user can edit and upload via the application.
+**query.csv**is een voorbeeld query casus die de gebruiker kan uploaden.
 
 ## R
-The R folder consists of three files.
-**01_libraries.R** is a script that loads libraries
+De R-map bestaat uit drie scripts
+**01_libraries.R** is een script welke packages laadt.
 
-**02_functions.R** is a script with two user-defined functions that the model uses
+**02_functions.R** is a script met twee user-defined functies die het model gebruikt/
 
-**03_defining_values.R** is a script that defines some values that the app needs. This way there is no unnecessary code in the app itself.
-
-## rsconnect
-Data used for uploading the application to the shinyapps.io server
+**03_defining_values.R** is een script waarin enkele waarden worden gedefineerd die de app gebruikt. Dit voorkomt onnodige code in de app zelf. 
 
 ## www
-The www folder contains additional data that the app needs, such as images, html files and a CSS format file. The .jpg and .png files are images that are loaded into the app. The workflow.html file shows the workflow of the targets, and the mycss.css contains additional formatting for the placement of the lab logo.
+Deze map bevat extra data die de app nodig heeft zoals afbeeldingen en html-bestanden. 
 
 ## Blog
-This map contains the markdown for the blog that I wrote on how to make a CBR-system in R. 
+Deze map bevat een markdown-file wat bestaat uit een blog met meer informatie over het CBR-model en hoe deze in R gebouwd kan worden. 
