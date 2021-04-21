@@ -352,11 +352,11 @@ pre code {
 </div>
 
 
-<p>In deze blog leg ik kort uit hoe je in R een case-based reasoning (cbr) systeem kan bouwen. Eerst ga ik kort in op wat cbr is, uit welke fases een CBR-model bestaat en wat de voor- en nadelen van CBR zijn. Vervolgens leg ik uit hoe in R, op basis van de sentence dataset, een simpel cbr-model gebouwd kan worden.</p>
+<p>In deze blog leg ik kort uit hoe je in R een case-based reasoning (CBR) systeem kan bouwen. Eerst ga ik kort in op wat CBR is, uit welke fases een CBR-model bestaat en wat de voor- en nadelen van CBR zijn. Vervolgens leg ik uit hoe in R, op basis van de sentence dataset, een simpel CBR-model gebouwd kan worden.</p>
 <p><strong>Resources voor de blog</strong></p>
 <ul>
-<li>Shinyapp: Ik heb ook een Shiny-app ontwikkeld, welke de output van het CBR-model weergeeft. Deze Shinyapp is te vinden via onderstaande link: <a href="https://sietske97.shinyapps.io/casebased-reasoning-application" class="uri">https://sietske97.shinyapps.io/casebased-reasoning-application</a></li>
-<li>Repository met code: De code voor deze repository is ook op GitHub te vinden via onderstaande URL: <a href="https://github.com/sietske97/casebased-reasoning-application" class="uri">https://github.com/sietske97/casebased-reasoning-application</a></li>
+<li>Shiny-app: Ik heb een Shiny-app ontwikkeld, welke de output van het CBR-model weergeeft. Deze Shiny-app is te vinden via onderstaande link: <a href="https://sietske97.shinyapps.io/casebased-reasoning-application" class="uri">https://sietske97.shinyapps.io/casebased-reasoning-application</a></li>
+<li>Repository met code: De code voor deze repository is op GitHub te vinden via onderstaande URL: <a href="https://github.com/sietske97/casebased-reasoning-application" class="uri">https://github.com/sietske97/casebased-reasoning-application</a></li>
 </ul>
 <div id="wat-is-case-based-reasoning" class="section level1">
 <h1>Wat is case-based reasoning?</h1>
@@ -375,7 +375,7 @@ pre code {
 </div>
 <div id="reuse-fase" class="section level4">
 <h4>2. Reuse fase</h4>
-<p>Op basis van de ‘retrieved case’ wordt een oplossing voor de nieuwe casus aangedragen. Dit kan op verschillende manieren gedaan worden. De meest simpele methode is door de oplossing van de ‘retrieved case’ direct toe te passen op de ‘new case’. Het is echter ook mogelijk dat een CBR-systeem niet één maar meerdere gelijke casussen retrieved. In dit geval kan door middel van een telling vastgesteld worden welke oplossing het vaakst voorkomt en kan deze oplossing toegepast worden op de nieuwe casus. Echter kunnen ook regels ingebouwd worden, om in bepaalde situaties bepaalde oplossingen aan te dragen. Deze opties zijn echter afhankelijk van het domein van het CBR-prototype en de beschikbare data. De aangedragen oplossing wordt vervolgens, buiten het systeem, toegepast op de nieuwe casus.</p>
+<p>Op basis van de ‘retrieved case’ wordt een oplossing voor de nieuwe casus aangedragen. Dit kan op verschillende manieren gedaan worden. De meest simpele methode is door de oplossing van de ‘retrieved case’ direct toe te passen op de ‘new case’. Het is echter ook mogelijk dat een CBR-systeem niet één maar meerdere gelijke casussen retrieved. In dit geval kan door middel van een telling vastgesteld worden welke oplossing het vaakst voorkomt en kan deze oplossing toegepast worden op de nieuwe casus. Er kunnen ook regels ingebouwd worden, om in bepaalde situaties bepaalde oplossingen aan te dragen. Deze opties zijn echter afhankelijk van het domein van het CBR-prototype en de beschikbare data. De aangedragen oplossing wordt vervolgens, buiten het systeem, toegepast op de nieuwe casus.</p>
 </div>
 <div id="revision-fase" class="section level4">
 <h4>3. Revision fase</h4>
@@ -383,20 +383,20 @@ pre code {
 </div>
 <div id="retain-fase" class="section level4">
 <h4>4. Retain fase</h4>
-<p>Als laatste stap in het CBR-systeem kan de nieuwe casus, met de bijbehorende oplossing, toegevoegd worden aan de case base. Dit gebeurt alleen als dit waarde oplevert voor het systeem. Als de nieuwe casus toegevoegd wordt, kan deze casus in de toekomst wanneer er voor nieuwe casussen een oplossing gevonden moet worden, gebruikt worden om een oplossing aan te dragen. Daarnaast kan het CBR-systeem leren van het feit of de oplossing wel of niet succesvol was. OP deze manier leert een CBR-systeem van zijn eigen advies. Het is echter wel belangrijk dat het CBR-systeem niet zijn eigen bias creëert door zijn eigen oplossing te blijven aandragen. In hoeverre dit gebeurt is afhankelijk van het CBR-systeem.</p>
-<p>CBR wordt in erg veel verschillende domeinen toegepast, van helpdesken tot de diagnose van ziektes. Het is een methode die voor zowel classificatie als regressieproblemen gebruikt kan worden. Bij classificatie voorspelt het model een klasse en bij regressie voorspelt het model een nummer. Een voorbeeld van een classificatieprobleem is het identificeren van spammail. Het CBR-model voorspelt het label: spam of geen spam. Een voorbeeld van regressie is het voorspellen van de omzet van een bedrijf.</p>
+<p>Als laatste stap in het CBR-systeem kan de nieuwe casus, met de bijbehorende oplossing, toegevoegd worden aan de case base. Dit gebeurt alleen als dit waarde oplevert voor het systeem. Als de nieuwe casus toegevoegd wordt, kan deze casus in de toekomst wanneer er voor nieuwe casussen een oplossing gevonden moet worden, gebruikt worden om een oplossing aan te dragen. Daarnaast kan het CBR-systeem leren van het feit of de oplossing wel of niet succesvol was. Op deze manier leert een CBR-systeem van zijn eigen advies. Het is echter wel belangrijk dat het CBR-systeem niet zijn eigen bias creëert door zijn eigen oplossing te blijven aandragen. In hoeverre dit gebeurt is afhankelijk van het CBR-systeem.</p>
+<p>CBR wordt in erg veel verschillende domeinen toegepast, van helpdesken tot de diagnose van ziektes. Het is een methode die voor zowel classificatie als regressieproblemen gebruikt kan worden. Bij classificatie voorspelt het model een klasse en bij regressie voorspelt het model een nummer. Een voorbeeld van een classificatieprobleem is het identificeren van spammail. Het CBR-model voorspelt het label: spam of geen spam. Een voorbeeld van een regressieprobleem is het voorspellen van de omzet van een bedrijf.</p>
 </div>
 </div>
 <div id="voordelen-en-nadelen-van-cbr" class="section level1">
 <h1>Voordelen en nadelen van CBR</h1>
-<p>CBR is wezenlijk anders dan andere methodes die ‘solutions’ kunnen aandragen voor nieuwe problemen, omdat CBR uitgaat van redenering op basis van een of meerdere casussen in de casebase, tegengesteld aan generalistische patronen die in de database te vinden zijn. In deze hoedanigheid zijn ook enkele voordelen te noemen aan het gebruik van CBR. Tevens zijn er ook enkele nadelen te noemen aan het gebruik van een CBR-systeem. De belangrijkste voor- en nadelen worden hieronder kort toegelicht.</p>
+<p>CBR is wezenlijk anders dan andere methodes die ‘solutions’ kunnen aandragen voor nieuwe problemen, omdat CBR uitgaat van redenering op basis van een of meerdere casussen in de case base, tegengesteld aan generalistische patronen die in de database te vinden zijn. In deze hoedanigheid zijn ook enkele voordelen te noemen aan het gebruik van CBR. Tevens zijn er ook enkele nadelen te noemen aan het gebruik van een CBR-systeem. De belangrijkste voor- en nadelen worden hieronder kort toegelicht.</p>
 <div id="voordelen-van-cbr" class="section level4">
 <h4>Voordelen van CBR</h4>
 <ol style="list-style-type: decimal">
 <li>Een CBR-systeem is intuïtiever dan andere algoritmes. Dit maakt de werking van een CBR- systeem eenvoudiger te begrijpen. De gebruiker van het systeem ziet namelijk niet alleen maar een aangedragen oplossing, maar ook de oude casussen in de case base waarop deze oplossing gebaseerd is. Deze werking lijkt veel meer op menselijke probleemoplossing dan een model dat enkel een output geeft.</li>
-<li>Oplossingen die het CBR-model aandraagt worden gerechtvaardigd door precedent. De oplossingen zijn al een keer in de echt wereld toegepast. Hoewel dit een andere casus betrof baseert het CBR-systeem zich op oplossingen die al een keer toegepast zijn. Hierbij is wel belangrijk om te weten of de oplossing van de oude casussen geslaagd was.</li>
+<li>Oplossingen die het CBR-model aandraagt worden gerechtvaardigd door precedent. De oplossingen zijn al een keer in de echte wereld toegepast. Hoewel dit een andere casus betrof baseert het CBR-systeem zich op oplossingen die al een keer toegepast zijn. Hierbij is wel belangrijk om te weten of de oplossing van de oude casussen geslaagd was.</li>
 <li>Het CBR-systeem kan leren van slechte oplossingen. Als bekend is of de oplossingen van de casussen in de case base succesvol waren of niet, kan het systeem de werking van de oplossing meenemen in het aandragen van een oplossing voor de nieuwe casus.</li>
-<li>CBR kan door de flexibele toepassing en representatie van de werkelijkheid in een probleem-oplossing definitie toegepast worden in heel veel verschillende domeinen.</li>
+<li>CBR kan door de flexibele toepassing en representatie van de werkelijkheid in een probleem-oplossing definitie toegepast worden in veel verschillende domeinen.</li>
 </ol>
 </div>
 <div id="nadelen-van-cbr" class="section level4">
@@ -412,12 +412,12 @@ pre code {
 <div id="het-ontwikkelen-van-een-cbr-systeem-in-r" class="section level1">
 <h1>Het ontwikkelen van een CBR-systeem in R</h1>
 <p>Er is op dit moment geen CRAN-package waarmee een CBR-systeem in R gebouwd kan worden. In 2019 was er een package genaamd <a href="https://cran.r-project.org/web/packages/CaseBasedReasoning/index.html">CaseBasedReasoning</a> maar deze is helaas verwijderd van CRAN in oktober 2019. Daarom moeten verschillende packages in R gecombineerd worden om een CBR-systeem te maken, en moet een deel van de code aangepast worden.</p>
-<p>Het CBR-systeem dat in deze blog wordt uitgelegd maakt gebruik van een KNN-nearest neighbour agoritme om de meest-gelijke casussen te selecteren. Het KNN package dat gebruikt wordt is <a href="https://cran.r-project.org/web/packages/FNN/index.html">FNN</a>. Dit package bevat code voor een ‘Fast Nearest Neighbour Search Algoritm’. Daarnaast bevat de output van het KNN-model ook een index met de meest-gelijke casussen die gebruikt kunnen worden om de gebruiker de meest-gelijke casussen te laten zien.</p>
-<p>Het CBR-systeem maakt gebruikt van een open dataset, de <strong>cook county dataset</strong> die gedownload kan worden van de <a href="https://datacatalog.cookcountyil.gov/Courts/Sentencing/tg8v-tm6u">website van de Cook County Government</a>.De dataset bevat een groot aantal records van veroordelingen en de bijbehorende straf. De straffen zijn opgedeeld in twee opties: <strong>non-dentention</strong>, zoals een taakstraf, en <strong>detention</strong>, zoals een gevangenisstraf.</p>
+<p>Het CBR-systeem dat in deze blog wordt uitgelegd maakt gebruik van een KNN-nearest neighbour agoritme om de meest-gelijke casussen te selecteren. Het KNN package dat gebruikt wordt is <a href="https://cran.r-project.org/web/packages/FNN/index.html">FNN</a>. Dit package bevat code voor een ‘Fast Nearest Neighbour Search Algoritm’. Daarnaast bevat de output van het KNN-model ook een index met de meest-gelijke casussen die gebruikt kan worden om de gebruiker de meest-gelijke casussen te laten zien.</p>
+<p>Het CBR-systeem maakt gebruikt van een open dataset, de <strong>cook county dataset</strong> die gedownload kan worden van de <a href="https://datacatalog.cookcountyil.gov/Courts/Sentencing/tg8v-tm6u">website van de Cook County Government</a>. De dataset bevat een groot aantal records van veroordelingen en de bijbehorende straf. De straffen zijn opgedeeld in twee opties: <strong>non-dentention</strong>, zoals een taakstraf, en <strong>detention</strong>, zoals een gevangenisstraf.</p>
 <p><strong>De data en code voor het CBR-model kan gevonden worden in de <a href="https://github.com/sietske97/casebased-reasoning-application">case-based reasoning GitHub repository</a></strong></p>
 <div id="de-gebruikte-packages-dataset-en-query-casus" class="section level2">
 <h2>De gebruikte packages, dataset en query casus</h2>
-<p>Hieronder worden de eerste tien rijen van de sentence database weergegeven. De data is op verschillende plekken opgeschoond en er is een steekproef genomen van 5% om ervoor te zorgen dat de webapplicatie niet té langzaam wordt. In de webapplicatie wordt onder de tab ‘de gebruikte dataset’ uitgelegd op welke manier de originele dataset is opgeschoond. <a href="https://github.com/sietske97/casebased-reasoning-application/tree/master/dutch/data">De dataset kan gedownload worden via de GitHub repository</a></p>
+<p>Hieronder worden de eerste vijf rijen van de sentence database weergegeven. De data is op verschillende plekken opgeschoond en er is een steekproef genomen van 1% om ervoor te zorgen dat de webapplicatie niet té langzaam wordt. In de webapplicatie wordt onder de tab ‘de gebruikte dataset’ uitgelegd op welke manier de originele dataset is opgeschoond. <a href="https://github.com/sietske97/casebased-reasoning-application/tree/master/dutch/data">De dataset kan gedownload worden via de GitHub repository</a></p>
 <pre class="r"><code># Dit zijn de libraries die gebruikt worden
 library(dplyr)
 library(readr)
@@ -448,12 +448,12 @@ head(query_data, 5)</code></pre>
 ## #   convicted_chicago &lt;fct&gt;</code></pre>
 </div>
 <div id="het-cbr-model" class="section level2">
-<h2>Het CBR Model</h2>
-<p>Hieronder wordt in zes stappen omschreven hoe er op basis van de Cook County dataset een simpel CBR-model gebouwd is die de eerste twee stappen van de CBR-cyclus doorloopt.</p>
+<h2>Het CBR-model</h2>
+<p>Hieronder wordt in zes stappen omschreven hoe er op basis van de Cook County dataset een simpel CBR-model gebouwd kan worden die de eerste twee stappen van de CBR-cyclus doorloopt.</p>
 <div id="normaliseren-van-data" class="section level3">
 <h3>1. Normaliseren van data</h3>
 <p>Een KNN-algoritme berekent de distance tussen de nieuwe casus en de casussen in de database, en daarom moet de data genormaliseerd worden. Dit moet gebeuren voor zowel de originele database, als de query casus. Het normaliseren van de database kan eenvoudig met de volgende functie:</p>
-<pre class="r"><code># De normalizeringsfunctie
+<pre class="r"><code># De normaliseringsfunctie
 normalize &lt;- function(x) {
   (x - min(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
 }
@@ -572,20 +572,16 @@ knn_results &lt;- FNN::knn(
 </div>
 <div id="het-cbr-systeem-o.b.v.-knn-results" class="section level3">
 <h3>6. Het CBR-systeem o.b.v. KNN-results</h3>
-<p>Met de output van het KNN-model kan vervolgens een CBR-systeem gebouwd worden. De FNN::knn() functie geeft als output een distance matrix met de afstand tussen de query-data en de test data. Daarnaast geeft het package een index van de meest-gelijke casussen en de voorspelde class van de query casus met de probability. Hieronder wordt uitgelegd hoe eerst de similarity tussen de query casus en database berekent kan worden o.b.v. de maximale distance die in stap vier is berekend.</p>
-<pre class="r"><code># Sla de verschillende attributes van knn_results apart op
-knn_attributes &lt;- attributes(knn_results)
-
-# Bereken de similarity op basis van de distance
-# knn_attributes$nn.dist is de afstand tussen de query data en de test data
-distance_knn &lt;- t(knn_attributes$nn.dist)
-
-# Deel de distance door de max_distance
-similarity_knn &lt;- as_tibble(1 - (distance_knn / max_dist))</code></pre>
-<pre><code>## Warning: The `x` argument of `as_tibble.matrix()` must have unique column names if `.name_repair` is omitted as of tibble 2.0.0.
-## Using compatibility `.name_repair`.</code></pre>
+<p>Met de output van het KNN-model kan vervolgens een CBR-systeem gebouwd worden. De FNN::knn() functie geeft als output een distance matrix met de afstand tussen de query-data en de test data. Daarnaast geeft het package een index van de meest-gelijke casussen en de voorspelde class van de query casus met de bijbehorende probability. Hieronder wordt uitgelegd hoe eerst de similarity tussen de query casus en database berekend kan worden op basis van de maximale distance die in stap vier is berekend.</p>
 <p>Vervolgens wordt er aan de query_data drie kolommen toegevoegd: een similarity kolom, een sentence kolom voor de solution en een soort kolom (‘query’ of ‘train_set’).</p>
-<p>Vervolgens moet de genormaliseerde database vervangen worden met de niet-genormaliseerde data, omdat de gebruiker de niet-genormaliseerde data nodig heeft. Dit is simpel de eerder gedefinieerde data. Vervolgens wordt op basis van de index_knn de meest-gelijke casussen weergegeven aan de gebruiker. Hierbij zijn de kolommen ‘soort’ en ‘similarity’ toegevoegd. Similarity bevat de gelijkenis tussen de twee zaken in percentage.</p>
+<pre class="r"><code># kolom similarity, sentence en soort toevoegen om te kunnen samenvoegen met resultaten
+query_results &lt;- query_data %&gt;%
+  mutate(
+    similarity = NA,
+    sentence = NA,
+    soort = &quot;query&quot;
+  )</code></pre>
+<p>Vervolgens wordt de genormaliseerde database vervangen door niet-genormaliseerde data, omdat de gebruiker de niet-genormaliseerde data nodig heeft. Dit is de eerder gedefinieerde data. Vervolgens worden op basis van de index_knn de meest-gelijke casussen weergegeven aan de gebruiker. Hierbij zijn de kolommen ‘soort’ en ‘similarity’ toegevoegd. Similarity bevat de gelijkenis tussen de twee zaken in percentage.</p>
 <pre class="r"><code># Opslaan van de index_tabel
 index_knn &lt;- as_tibble(t(knn_attributes$nn.index))
 
@@ -696,13 +692,13 @@ print(results$results_dataframe)</code></pre>
 ## 14                ja
 ## 15                ja
 ## 16                ja</code></pre>
-<pre class="r"><code># Dit is de aangedragen solution door het CBR model
+<pre class="r"><code># Dit is de aangedragen solution door het CBR-model
 print(results$class)</code></pre>
 <pre><code>## [1] &quot;Detention&quot;</code></pre>
 <pre class="r"><code># Dit is het percentage van de nearest neighbours die de solution aandraagt
 print(results$probability)</code></pre>
 <pre><code>## [1] 0.7333333</code></pre>
-<p>Zoals te zien is in de resultaten is de aangedragen oplossing voor de query casus <strong>detention</strong> omdat 73% van de nearest-neighbours deze klasse had.</p>
+<p>Zoals te zien is in de resultaten is de aangedragen oplossing voor de query casus <strong>detention</strong> omdat 73% van de nearest-neighbours deze klasse heeft.</p>
 <p>Naast deze code heb ik een simpele Shiny-applicatie ontwikkeld die deze resultaten weergeeft. <a href="https://sietske97.shinyapps.io/casebased-reasoning-application">De Shiny-applicatie is hier te vinden</a></p>
 </div>
 <div id="extra-functionaliteit-random-query-generator" class="section level3">
@@ -751,7 +747,7 @@ head(query_data, 1)</code></pre>
 <pre><code>## # A tibble: 1 x 11
 ##   case_id charge_count charge_disposit~ sentence_court_~ length_of_case_~
 ##     &lt;dbl&gt;        &lt;dbl&gt; &lt;fct&gt;            &lt;fct&gt;                       &lt;dbl&gt;
-## 1 7.14e11            1 Finding Guilty   District 1 - Ch~             5860
+## 1 7.14e11           20 Plea Of Guilty   District 1 - Ch~             5860
 ## # ... with 6 more variables: age_at_incident &lt;dbl&gt;, gender &lt;fct&gt;,
 ## #   offense_category &lt;fct&gt;, days_incident_arrest &lt;dbl&gt;, sentence &lt;chr&gt;,
 ## #   convicted_chicago &lt;fct&gt;</code></pre>
